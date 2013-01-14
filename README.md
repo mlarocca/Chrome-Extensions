@@ -3,4 +3,4 @@ Chrome-Extensions
 
 This is a collection of free Chrome extensions thought for various purposes
 
-* [TagCloudChromeEx](./TagCloudChromeEx) (using AngularJS, JQuery, D3js)
+* [TagCloudChromeEx](https://github.com/mlarocca/Chrome-Extensions/tree/master/TagCloudChromeEx) (using AngularJS, JQuery, D3js)
