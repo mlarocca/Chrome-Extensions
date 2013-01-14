@@ -5,7 +5,7 @@ var SEARCH_API_URL = {  "search_Google" : "http://www.google.com/search?q=",
                         "search_Wikipedia" : "http://wikipedia.org/w/index.php?search="
                     };
                     
-var TRANSLATE_API_URL = {  "translate_Google" : "http://translate.google.it/#en/it/" };                 
+var TRANSLATE_API_URL = {  "translate_Google" : "http://translate.google.it/#auto/en/" };                 
 
 /** @method search
   * @private
