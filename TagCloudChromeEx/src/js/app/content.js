@@ -186,9 +186,9 @@ function (request, sender, sendResponse) {
             tmp = tmp.split(/\s+/);
             n = tmp.length;
             for (i=0; i < n; i++){
-                w = tmp[i];
+                w = tmp[i].toLowerCase();
                 if (word_re.test(w) && !blackList[w]){
-                    w = w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+                    w = w.charAt(0).toUpperCase() + w.slice(1);
                     if (tagCloudDict[w]){
                         tagCloudDict[w] += 1;
                     }else{

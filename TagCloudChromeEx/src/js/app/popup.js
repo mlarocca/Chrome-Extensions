@@ -19,7 +19,7 @@ var WORD_BLACKLIST =    {   "the": true, "or": true, "and": true, "for": true, "
                             "this": true, "those": true, "these": true, "has": true, "have": true, "had": true, 
                             "are": true, "am": true, "not": true, "no": true, "but": true, "his": true, "her": true, 
                             "him": true, "its": true, "in": true, "into": true, "my": true, "who": true, "us": true, 
-                            "which": true, "when": true, "how": true, "date": true, "day": true
+                            "which": true, "when": true, "how": true, "date": true, "day": true, "with": true
                         }
     
 /** Service #1 tagCloudService<br>
