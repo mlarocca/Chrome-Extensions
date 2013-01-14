@@ -28,7 +28,7 @@ myApp.service('tagCloudService', function() {
                 model.title = tabs[0].title;
                 model.url = tabs[0].url;
 
-                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', MAX_LABEL_SIZE: MAX_LABEL_SIZE, MIN_LABEL_SIZE: MIN_LABEL_SIZE, MAX_TAGS: MAX_TAGS }, function (response) {
+                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', MAX_LABEL_SIZE: MAX_LABEL_SIZE, MIN_LABEL_SIZE: MIN_LABEL_SIZE, MAX_TAGS: MAX_TAGS }, 			function (response) {
                     
                     model.tagCloud = response;
                     callback(model);
@@ -106,63 +106,65 @@ myApp.service('tagCloudRender', function() {
   */
 myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRender) {
     
-    tagCloudService.getInfo(function (info) {
-    
-        /** @method search
-          * @private
-          *
-          * Helper function<br>
-          * Search the text in the input field with id "search_bar", using the search engine whose base
-          * url for the search api is specified as first parameter.
-          *
-          * @param {String} search_api_url The base address of the search api for the engine that is going to be used
-          */
-        function search(search_api_url){
-            var full_text = $.trim($("#search_bar").val()).replace(/\s+/g, "+");
-            if (full_text){
-                window.open(search_api_url + full_text);
-            }
-            return ;
-        }    
-    
-        //Callback callable only once
-        var callback = function(){
-            
-            var width = window.innerWidth;
-            var height = window.innerHeight - $('#search_bar').height();            
-            tagCloudRender.render(info.tagCloud, width, height, 
-                                    function(text){
-                                        $("#search_bar").val($("#search_bar").val() + " " + text); 
-                                    });
-                                    
-                    
-            $("#search_button_google").click(   function(event){
-                                                    search(GOOGLE_SEARCH_API_URL);
-                                                });    
-                                        
-            $("#search_button_twitter").click(  function(event){
-                                                    search(TWITTER_SEARCH_API_URL);
-                                                });   
-                                        
-            $("#search_button_facebook").click( function(event){
-                                                    search(FACEBOOK_SEARCH_API_URL);
-                                                });
-                                        
-            $("#search_button_quora").click(    function(event){
-                                                    search(QUORA_SEARCH_API_URL);
-                                                });    
-                                        
-            $("#search_button_wikipedia").click(function(event){
-                                                    search(WIKIPEDIA_SEARCH_API_URL);
-                                                });
-            
-            callback = null;    //Callback callable only once
-        }
+    tagCloudService.getInfo(
+        (function () {
         
-        if (callback){
-            callback();
-        }
-    });
+            /** @method search
+              * @private
+              *
+              * Helper function<br>
+              * Search the text in the input field with id "search_bar", using the search engine whose base
+              * url for the search api is specified as first parameter.
+              *
+              * @param {String} search_api_url The base address of the search api for the engine that is going to be used
+              */
+            function search(search_api_url){
+                var full_text = $.trim($("#search_bar").val()).replace(/\s+/g, "+");
+                if (full_text){
+                    window.open(search_api_url + full_text);
+                }
+                return ;
+            }    
+        
+            //Callback callable only once
+            var callback = function(info){
+                
+                var width = window.innerWidth;
+                var height = window.innerHeight - $('#search_bar').height();            
+                tagCloudRender.render(info.tagCloud, width, height, 
+                                        function(text){
+                                            $("#search_bar").val($("#search_bar").val() + " " + text); 
+                                        });
+                                        
+                        
+                $("#search_button_google").click(   function(event){
+                                                        search(GOOGLE_SEARCH_API_URL);
+                                                    });    
+                                            
+                $("#search_button_twitter").click(  function(event){
+                                                        search(TWITTER_SEARCH_API_URL);
+                                                    });   
+                                            
+                $("#search_button_facebook").click( function(event){
+                                                        search(FACEBOOK_SEARCH_API_URL);
+                                                    });
+                                            
+                $("#search_button_quora").click(    function(event){
+                                                        search(QUORA_SEARCH_API_URL);
+                                                    });    
+                                            
+                $("#search_button_wikipedia").click(function(event){
+                                                        search(WIKIPEDIA_SEARCH_API_URL);
+                                                    });
+                
+                callback = null;    //Callback callable only once
+
+            //$scope.apply();	//Update the page, if any template tag or helper is used
+            }
+            
+            return callback;
+        
+        })());
 
 });
 
