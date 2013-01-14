@@ -17,8 +17,8 @@ body {
 #search_bar{
     position: absolute;
     top: 5px;
-    left: 110px;
-    width: 400px;
+    left: 140px;
+    width: 370px;
     height: 25px;
     border: 2px solid #909090;
     border-radius: 10px;
@@ -55,6 +55,12 @@ body {
     position: absolute;
     top: 10px;
     left: 85px;
+}
+
+#search_button_wikipedia{
+    position: absolute;
+    top: 10px;
+    left: 110px;
 }
 
 #search_bar_div{

@@ -4,11 +4,12 @@ var MAX_TAGS = 100;
 var GOOGLE_SEARCH_API_URL = "http://www.google.com/search?q=",
     TWITTER_SEARCH_API_URL = "https://twitter.com/search?q=",
     FACEBOOK_SEARCH_API_URL = "https://www.facebook.com/search/results.php?q=",
-    QUORA_SEARCH_API_URL = "http://api.quora.com/search?q=";
+    QUORA_SEARCH_API_URL = "http://api.quora.com/search?q=",
+    WIKIPEDIA_SEARCH_API_URL = "http://wikipedia.org/w/index.php?search=prova+la+ricerca+test&fulltext=Search";
 
     
-/** Service #1 tagCloudService
-  * This service is in charge of parsing the HTML of the current tab and creating a tag cloud.
+/** Service #1 tagCloudService<br>
+  * This service is in charge of parsing the HTML of the current tab and creating a tag cloud.<br>
   * Calls a model on the selected tab by sending a message to the tabs handler
   * 
   * @require content.js
@@ -38,8 +39,8 @@ myApp.service('tagCloudService', function() {
     };
 });
 
-/** Service #2 tagCloudRender
-  * This service is in charge of rendering the tag cloud.
+/** Service #2 tagCloudRender<br>
+  * This service is in charge of rendering the tag cloud.<br>
   * Calls a model on the selected tab by sending a message to the tabs handler
   *
   * 
@@ -91,9 +92,10 @@ myApp.service('tagCloudRender', function() {
     };
 });
 
+
 /** PageController
   *
-  * Controller of the 
+  * Controller associated with the main div for the page.
   *
   * @method PageController
   * @param {Object} $scope The (AngularJS) scope on which the controller is called
@@ -105,6 +107,24 @@ myApp.service('tagCloudRender', function() {
 myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRender) {
     
     tagCloudService.getInfo(function (info) {
+    
+        /** @method search
+          * @private
+          *
+          * Helper function<br>
+          * Search the text in the input field with id "search_bar", using the search engine whose base
+          * url for the search api is specified as first parameter.
+          *
+          * @param {String} search_api_url The base address of the search api for the engine that is going to be used
+          */
+        function search(search_api_url){
+            var full_text = $.trim($("#search_bar").val());
+            if (full_text){
+                window.open(search_api_url + full_text);
+            }
+            return ;
+        }    
+    
         //Callback callable only once
         var callback = function(){
             
@@ -116,33 +136,25 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                     });
                                     
                     
-            $("#search_button_google").click(  function(event){
-                                            var full_text = $.trim($("#search_bar").val());
-                                            if (full_text){
-                                                window.open(GOOGLE_SEARCH_API_URL + full_text);
-                                            }
-                                        });    
+            $("#search_button_google").click(   function(event){
+                                                    search(GOOGLE_SEARCH_API_URL);
+                                                });    
                                         
             $("#search_button_twitter").click(  function(event){
-                                            var full_text = $.trim($("#search_bar").val());
-                                            if (full_text){
-                                                window.open(TWITTER_SEARCH_API_URL + full_text);
-                                            }
-                                        });   
+                                                    search(TWITTER_SEARCH_API_URL);
+                                                });   
                                         
-            $("#search_button_facebook").click(  function(event){
-                                            var full_text = $.trim($("#search_bar").val());
-                                            if (full_text){
-                                                window.open(FACEBOOK_SEARCH_API_URL + full_text);
-                                            }
-                                        });
+            $("#search_button_facebook").click( function(event){
+                                                    search(FACEBOOK_SEARCH_API_URL);
+                                                });
                                         
-            $("#search_button_quora").click(  function(event){
-                                            var full_text = $.trim($("#search_bar").val());
-                                            if (full_text){
-                                                window.open(QUORA_SEARCH_API_URL + full_text);
-                                            }
-                                        });
+            $("#search_button_quora").click(    function(event){
+                                                    search(QUORA_SEARCH_API_URL);
+                                                });    
+                                        
+            $("#search_button_wikipedia").click(function(event){
+                                                    search(WIKIPEDIA_SEARCH_API_URL);
+                                                });
             
             callback = null;    //Callback callable only once
         }
