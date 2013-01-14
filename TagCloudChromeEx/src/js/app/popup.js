@@ -5,7 +5,7 @@ var GOOGLE_SEARCH_API_URL = "http://www.google.com/search?q=",
     TWITTER_SEARCH_API_URL = "https://twitter.com/search?q=",
     FACEBOOK_SEARCH_API_URL = "https://www.facebook.com/search/results.php?q=",
     QUORA_SEARCH_API_URL = "http://api.quora.com/search?q=",
-    WIKIPEDIA_SEARCH_API_URL = "http://wikipedia.org/w/index.php?search=prova+la+ricerca+test&fulltext=Search";
+    WIKIPEDIA_SEARCH_API_URL = "http://wikipedia.org/w/index.php?search=";
 
     
 /** Service #1 tagCloudService<br>
@@ -118,7 +118,7 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
           * @param {String} search_api_url The base address of the search api for the engine that is going to be used
           */
         function search(search_api_url){
-            var full_text = $.trim($("#search_bar").val());
+            var full_text = $.trim($("#search_bar").val()).replace(/\s+/g, "+");
             if (full_text){
                 window.open(search_api_url + full_text);
             }
