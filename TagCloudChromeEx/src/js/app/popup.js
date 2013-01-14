@@ -7,6 +7,20 @@ var GOOGLE_SEARCH_API_URL = "http://www.google.com/search?q=",
     QUORA_SEARCH_API_URL = "http://api.quora.com/search?q=",
     WIKIPEDIA_SEARCH_API_URL = "http://wikipedia.org/w/index.php?search=";
 
+    /** @property WORD_BLACKLIST
+      * @type {Object}
+      * @readOnly
+      * @private
+      * Sublist of the 100 most common words used in English.<br>
+      * Used to avoid including them in the tag cloud.
+      */
+var WORD_BLACKLIST =    {   "the": true, "or": true, "and": true, "for": true, "you": true, "your": true, "our": true,
+                            "yours": true, "ours": true, "mine": true, "my": true, "that": true,
+                            "this": true, "those": true, "these": true, "has": true, "have": true, "had": true, 
+                            "are": true, "am": true, "not": true, "no": true, "but": true, "his": true, "her": true, 
+                            "him": true, "its": true, "in": true, "into": true, "my": true, "who": true, "us": true, 
+                            "which": true, "when": true, "how": true, "date": true, "day": true
+                        }
     
 /** Service #1 tagCloudService<br>
   * This service is in charge of parsing the HTML of the current tab and creating a tag cloud.<br>
@@ -28,11 +42,17 @@ myApp.service('tagCloudService', function() {
                 model.title = tabs[0].title;
                 model.url = tabs[0].url;
 
-                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', MAX_LABEL_SIZE: MAX_LABEL_SIZE, MIN_LABEL_SIZE: MIN_LABEL_SIZE, MAX_TAGS: MAX_TAGS }, 			function (response) {
-                    
-                    model.tagCloud = response;
-                    callback(model);
-                });
+                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', 
+                                                      MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
+                                                      MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
+                                                      MAX_TAGS: MAX_TAGS,
+                                                      BLACKLIST: WORD_BLACKLIST 
+                                                    },
+                                            function (response) {
+                                                
+                                                model.tagCloud = response;
+                                                callback(model);
+                                            });
             }
 
         });

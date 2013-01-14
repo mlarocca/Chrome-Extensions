@@ -1,6 +1,4 @@
 ﻿//alert('content script loaded');
-
-
 /** @method makeFixedSizeMaxHeap
   * @private
   * Creates a FixedSizeMaxHeap.
@@ -175,6 +173,7 @@ function (request, sender, sendResponse) {
     
     if (request.action == 'PageTagCloud') {
         var tagCloud = makeFixedSizeMaxHeap(request.MAX_TAGS);
+        var blackList = request.BLACKLIST || {};
         
         var tagCloudDict = {}, 
             minCounter = 1.7976931348623157E+10308,
@@ -187,8 +186,9 @@ function (request, sender, sendResponse) {
             tmp = tmp.split(/\s+/);
             n = tmp.length;
             for (i=0; i < n; i++){
-                w = tmp[i].charAt(0).toUpperCase() + tmp[i].slice(1).toLowerCase();
-                if (word_re.test(w)){
+                w = tmp[i];
+                if (word_re.test(w) && !blackList[w]){
+                    w = w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
                     if (tagCloudDict[w]){
                         tagCloudDict[w] += 1;
                     }else{
