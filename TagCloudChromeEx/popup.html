@@ -1,0 +1,27 @@
+﻿<!doctype html>
+<html ng-app="TagCloudChromeEx" ng-csp>
+    <head>
+        <link rel="stylesheet" href="css/popup.css">
+
+        <script src="js/lib/angular.min.js"></script>
+        <script src="js/lib/d3.v3.min.js"></script>
+        <script src="js/lib/d3.layout.cloud.js"></script>
+        <script src="js/lib/jquery-1.8.3.min.js"></script>
+        
+        <script src="js/app/app.js"></script>
+        <script src="js/app/popup.js"></script>
+    </head>
+    <body id="popup">
+        <div ng-controller="PageController">
+            <div id="search_bar_div">
+                <img id = "search_button_google" class="search_button" src = "img/google.png" />
+                <img id = "search_button_twitter" class="search_button" src = "img/twitter.png" />
+                <img id = "search_button_facebook" class="search_button" src = "img/facebook.png" />
+                <img id = "search_button_quora" class="search_button" src = "img/quora.png" />
+                <input type="text" id="search_bar"/>
+            </div>        
+            <div id="cloud_div">
+            </div>
+        </div>
+    </body>
+</html>

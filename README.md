@@ -1,4 +1,6 @@
 Chrome-Extensions
 =================
 
-Collection of Chrome extensions (mostly using AngularJS)
+This is a collection of free Chrome extensions thought for various purposes
+
+* [TagCloudChromeEx](./TagCloudChromeEx) (using AngularJS, JQuery, D3js)

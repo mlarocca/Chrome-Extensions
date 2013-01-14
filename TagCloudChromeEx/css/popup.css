@@ -1,0 +1,74 @@
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+#popup {
+  min-width: 500px;
+  width: 500px;
+  min-height: 100px;
+  height: 400px;
+  margin: 12px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#search_bar{
+    position: absolute;
+    top: 5px;
+    left: 110px;
+    width: 400px;
+    height: 25px;
+    border: 2px solid #909090;
+    border-radius: 10px;
+}
+
+.search_button{
+    opacity: 1.0;
+}
+
+.search_button:hover{
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+#search_button_google{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+#search_button_twitter{
+    position: absolute;
+    top: 10px;
+    left: 35px;
+}
+
+#search_button_facebook{
+    position: absolute;
+    top: 10px;
+    left: 60px;
+}
+
+#search_button_quora{
+    position: absolute;
+    top: 10px;
+    left: 85px;
+}
+
+#search_bar_div{
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tag{
+    cursor: normal;
+    opacity: 1.0;
+}
+
+.tag:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}
