@@ -18,6 +18,12 @@ content on several search engines (Google, Twitter, Facebook, Quora and Wikipedi
 
 By clicking on any tag in the tag cloud, you'll be able to add its text to the search bar, instead of typing it.
 
+## Version 1.0.0
+
+Right click functionality added on selection: you can search the selected text with the same search engines as above, 
+and translate it with Google Translate.
+
+
 ## Version 0.2.1
 
 This is a simple extension, based on AngularJS framework, that, each time it is activates, 

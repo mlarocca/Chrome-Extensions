@@ -1,6 +1,6 @@
 ﻿{
 	"name": "TagCloudChromeEx",
-	"version": "0.2.1",
+	"version": "1.0.0",
 	"manifest_version": 2,
 
 	"description": "Tag Cloud Chrome Extension",
@@ -18,6 +18,9 @@
 	"run_at": "document_start"
 	} ],
 	"minimum_chrome_version": "18",
-	"permissions": [ "http://*/*", "https://*/*", "unlimitedStorage", "contextMenus", "cookies", "tabs", "notifications" ]
-
+	"permissions": [ "http://*/*", "https://*/*", "unlimitedStorage", "contextMenus", "cookies", "tabs", "notifications", "contextMenus" ],
+    "background": {
+        "persistent": true,
+        "scripts": ["js/app/contextMenu.js"]
+    }
 }
