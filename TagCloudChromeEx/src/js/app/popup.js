@@ -90,7 +90,7 @@ myApp.service('tagCloudRender', function() {
                 .attr("width", width)
                 .attr("height", height)
               .append("g")
-                .attr("transform", "translate(" + (Math.floor(width / 2) - MIN_LABEL_SIZE) + "," + Math.floor(height / 2) + ")")
+                .attr("transform", "translate(" + (Math.floor(width / 2) - MIN_LABEL_SIZE/2) + "," + Math.floor(height / 2) + ")")
               .selectAll("text")
                 .data(words)
               .enter().append("text")
@@ -150,7 +150,7 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
             var callback = function(info){
                 
                 var width = window.innerWidth;
-                var height = window.innerHeight - $('#search_bar').height();            
+                var height = window.innerHeight - $('#cloud_div').position().top;            
                 tagCloudRender.render(info.tagCloud, width, height, 
                                         function(text){
                                             $("#search_bar").val($("#search_bar").val() + " " + text); 
@@ -177,6 +177,17 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                                         search(WIKIPEDIA_SEARCH_API_URL);
                                                     });
                 
+                $("#clearModal_OK").click(function(event){
+                                                        $("#search_bar").val("");
+                                                    });
+                                                    
+                                    // stops modal from being shown if search bar is empty
+                $('#clearModal').on('show', function (e) {
+                                                if (!$("#search_bar").val()){
+                                                    return e.preventDefault(); 
+                                                }
+                                            });                                                 
+                                                    
                 callback = null;    //Callback callable only once
 
             //$scope.apply();	//Update the page, if any template tag or helper is used

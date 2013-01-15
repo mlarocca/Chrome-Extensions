@@ -1,13 +1,13 @@
 body {
   font-family: Helvetica, sans-serif;
-}
-
-#popup {
-  min-width: 500px;
-  width: 500px;
-  min-height: 100px;
-  height: 400px;
-  margin: 12px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  min-width: 580px;
+  max-width: 580;
+  width: 580;
+  min-height: 200px;
+  height: 440px;
+  margin: 0px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -15,13 +15,15 @@ body {
 }
 
 #search_bar{
-    position: absolute;
+   position: absolute;
     top: 5px;
-    left: 140px;
-    width: 370px;
-    height: 25px;
+    left: 130px;
+    width: 400px;
+    height: 20px;
     border: 2px solid #909090;
-    border-radius: 10px;
+    border-radius: 8px;
+	font: 18px/18px "Arial", "SansSerif";
+	letter-spacing: -1px;     
 }
 
 .search_button{
@@ -36,37 +38,49 @@ body {
 #search_button_google{
     position: absolute;
     top: 10px;
-    left: 10px;
+    left: 5px;
 }
 
 #search_button_twitter{
     position: absolute;
     top: 10px;
-    left: 35px;
+    left: 30px;
 }
 
 #search_button_facebook{
     position: absolute;
     top: 10px;
-    left: 60px;
+    left: 55px;
 }
 
 #search_button_quora{
     position: absolute;
     top: 10px;
-    left: 85px;
+    left: 80px;
 }
 
 #search_button_wikipedia{
     position: absolute;
     top: 10px;
-    left: 110px;
+    left: 105px;
+}
+
+#button_clear{
+    position: absolute;
+    top: 12px;
+    left: 555px;
 }
 
 #search_bar_div{
     height: 30px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#cloud_div{
+    position: absolute;
+    top: 40px;
+    left: 0px;
 }
 
 .tag{

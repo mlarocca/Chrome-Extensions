@@ -1,28 +1,46 @@
 ﻿<!doctype html>
-<html ng-app="TagCloudChromeEx" ng-csp>
+<html lang="en" ng-app="TagCloudChromeEx" ng-csp>
     <head>
         <link rel="stylesheet" href="css/popup.css">
-
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        
         <script src="js/lib/angular.min.js"></script>
         <script src="js/lib/d3.v3.min.js"></script>
         <script src="js/lib/d3.layout.cloud.js"></script>
         <script src="js/lib/jquery-1.8.3.min.js"></script>
+        <script src="js/lib/bootstrap.min.js"></script>
         
         <script src="js/app/app.js"></script>
         <script src="js/app/popup.js"></script>
     </head>
     <body id="popup">
-        <div ng-controller="PageController">
-            <div id="search_bar_div">
-                <img id = "search_button_google" class="search_button" src = "img/google.png" title="Search with Google" />
-                <img id = "search_button_twitter" class="search_button" src = "img/twitter.png" title="Search with Twitter" />
-                <img id = "search_button_facebook" class="search_button" src = "img/facebook.png" title="Search with Facebook" />
-                <img id = "search_button_quora" class="search_button" src = "img/quora.png" title="Search with Quora" />
-                <img id = "search_button_wikipedia" class="search_button" src = "img/wikipedia.png" title="Search with Wikipedia" />
-                <input type="text" id="search_bar" title="Enter your query"/>
-            </div>        
-            <div id="cloud_div">
-            </div>
+        
+        <div id="search_bar_div">
+            <img id = "search_button_google" class="search_button" src = "img/google.png" title="Search with Google" />
+            <img id = "search_button_twitter" class="search_button" src = "img/twitter.png" title="Search with Twitter" />
+            <img id = "search_button_facebook" class="search_button" src = "img/facebook.png" title="Search with Facebook" />
+            <img id = "search_button_quora" class="search_button" src = "img/quora.png" title="Search with Quora" />
+            <img id = "search_button_wikipedia" class="search_button" src = "img/wikipedia.png" title="Search with Wikipedia" />
+            <input type="text" id="search_bar" title="Enter your query"/>
+            <a role="button" href="#clearModal" data-toggle="modal"><img id = "button_clear" class="search_button" src = "img/clear.png" title="Clear search bar" /></a>
+        </div>        
+        <div id="cloud_div" ng-controller="PageController">
         </div>
+        
+        <!-- Modal -->
+        <div id="clearModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel"><img src = "img/warning.png" /> Warning!</h3>
+            
+          </div>
+          <div class="modal-body">
+            <p>Do you really want to clear the content of your search bar?</p>
+          </div>
+          <div class="modal-footer">
+            <button id="clearModal_close" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="clearModal_OK" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
+          </div>
+        </div>        
     </body>
 </html>
