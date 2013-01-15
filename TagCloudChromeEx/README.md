@@ -3,12 +3,7 @@
 
 ## Installation
 
-Newer versions of Chrome requires a slightely more complicate path to install extensions.
-
-First, download the file TagCloudChromeEx.crx and save it in any folder in your computer. Then paste this address in Chrome address bar:
-[chrome://chrome/extensions/](chrome://chrome/extensions/). This will bring you to the extensions page of your Chrome browser.
-
-Now you can drag and drop the file above from the folder into whom you saved it directly to the extensions page: just follow instructions, allowing the required permissions, and you'll be ready to go!
+You can now install this extension from the chrome webstore [here](http://goo.gl/pQHts): just follow instructions, allowing the required permissions, and you'll be ready to go!
 
 ## Usage
 
