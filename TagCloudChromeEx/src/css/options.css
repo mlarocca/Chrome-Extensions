@@ -1,0 +1,21 @@
+@import url('bootstrap.min.css');
+@import url('bootstrap-responsive.min.css');
+
+body{
+    padding-top: 80px;
+}
+
+.page-title{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: normal;
+    padding-left: 30px;
+}
+
+.field{
+    text-align: right;
+}

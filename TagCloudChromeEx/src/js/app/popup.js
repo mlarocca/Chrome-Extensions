@@ -1,26 +1,4 @@
-﻿var MAX_LABEL_SIZE = 60,
-    MIN_LABEL_SIZE = 12;
-var MAX_TAGS = 100; 
-var GOOGLE_SEARCH_API_URL = "http://www.google.com/search?q=",
-    TWITTER_SEARCH_API_URL = "https://twitter.com/search?q=",
-    FACEBOOK_SEARCH_API_URL = "https://www.facebook.com/search/results.php?q=",
-    QUORA_SEARCH_API_URL = "http://api.quora.com/search?q=",
-    WIKIPEDIA_SEARCH_API_URL = "http://wikipedia.org/w/index.php?search=";
-
-    /** @property WORD_BLACKLIST
-      * @type {Object}
-      * @readOnly
-      * @private
-      * Sublist of the 100 most common words used in English.<br>
-      * Used to avoid including them in the tag cloud.
-      */
-var WORD_BLACKLIST =    {   "the": true, "or": true, "and": true, "for": true, "you": true, "your": true, "our": true,
-                            "yours": true, "ours": true, "mine": true, "my": true, "that": true,
-                            "this": true, "those": true, "these": true, "has": true, "have": true, "had": true, 
-                            "are": true, "am": true, "not": true, "no": true, "but": true, "his": true, "her": true, 
-                            "him": true, "its": true, "in": true, "into": true, "my": true, "who": true, "us": true, 
-                            "which": true, "when": true, "how": true, "date": true, "day": true, "with": true
-                        }
+﻿
     
 /** Service #1 tagCloudService<br>
   * This service is in charge of parsing the HTML of the current tab and creating a tag cloud.<br>
@@ -158,24 +136,36 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                         
                         
                 $("#search_button_google").click(   function(event){
-                                                        search(GOOGLE_SEARCH_API_URL);
+                                                        search(SEARCH_API_URL["search_Google"]);
                                                     });    
                                             
                 $("#search_button_twitter").click(  function(event){
-                                                        search(TWITTER_SEARCH_API_URL);
+                                                        search(SEARCH_API_URL["search_Twitter"]);
                                                     });   
                                             
                 $("#search_button_facebook").click( function(event){
-                                                        search(FACEBOOK_SEARCH_API_URL);
+                                                        search(SEARCH_API_URL["search_Facebook"]);
                                                     });
                                             
                 $("#search_button_quora").click(    function(event){
-                                                        search(QUORA_SEARCH_API_URL);
+                                                        search(SEARCH_API_URL["search_Quora"]);
                                                     });    
                                             
                 $("#search_button_wikipedia").click(function(event){
-                                                        search(WIKIPEDIA_SEARCH_API_URL);
+                                                        search(SEARCH_API_URL["search_Wikipedia"]);
                                                     });
+ 
+                $("#search_bar").keypress(  function(event) {
+                                                if ( event.which === 13 ) {
+                                                    var search_engine = OptionsHandler.loadOption("search_engine");
+                                                    
+                                                    if (typeof SEARCH_API_URL[search_engine] === "undefined"){
+                                                        search_engine = OptionsHandler.getDefaultValue("search_engine");
+                                                    } 
+                                                    
+                                                    search(SEARCH_API_URL[search_engine]);
+                                                } 
+                                            });
                 
                 $("#clearModal_OK").click(function(event){
                                                         $("#search_bar").val("");
@@ -186,7 +176,9 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                                 if (!$("#search_bar").val()){
                                                     return e.preventDefault(); 
                                                 }
-                                            });                                                 
+                                            });              
+
+                $('.search_button').tooltip();
                                                     
                 callback = null;    //Callback callable only once
 

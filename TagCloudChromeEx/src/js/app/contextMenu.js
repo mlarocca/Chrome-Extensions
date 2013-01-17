@@ -1,16 +1,6 @@
-
-(function scope(){
+(function initMenu(){
     //avoid polluting the global namespace
-
-        
-    var SEARCH_API_URL = {  "search_Google" : "http://www.google.com/search?q=",
-                            "search_Twitter" : "https://twitter.com/search?q=",
-                            "search_Facebook" : "https://www.facebook.com/search/results.php?q=",
-                            "search_Quora" : "http://api.quora.com/search?q=",
-                            "search_Wikipedia" : "http://wikipedia.org/w/index.php?search="
-                        };
-                        
-    var TRANSLATE_API_URL = {  "translate_Google" : "http://translate.google.it/#auto/en/" };                 
+             
 
     /** @method search
       * @private
@@ -38,7 +28,16 @@
             //search menu item clicked
         }else if (/^translate_[\S]*/.test(id)){
             //search menu item clicked
-            search(TRANSLATE_API_URL[id], info.selectionText);
+            var language;
+            try{
+                language = OptionsHandler.loadOption("target_language");// localStorage["TagCloud_Ext_target_language"];
+                if (!ALLOWED_LANGUAGES[language]){
+                    language = OptionsHandler.getDefaultValue("target_language");
+                }
+            } catch(e) {
+                language = OptionsHandler.getDefaultValue("target_language");    //English by default
+            }
+            search(TRANSLATE_API_URL[id] + language + "/" , info.selectionText);
         }
     }    
     chrome.contextMenus.onClicked.addListener(onClickHandler);
@@ -47,8 +46,7 @@
     for ( i = 0; i < engines.length; i++) {
         engine = engines[i];
         title = "Search with '" + engine + "...";
-        id = chrome.contextMenus.create({"contexts": ["selection"], "title": title, "id": "search_" + engine});
-                                       
+        id = chrome.contextMenus.create({"contexts": ["selection"], "title": title, "id": "search_" + engine});                                
     }
 
     chrome.contextMenus.create({"contexts": ["selection"], "title": "Translate...", "id": "translate_Google"});
