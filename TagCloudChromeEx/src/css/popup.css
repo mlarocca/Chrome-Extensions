@@ -39,36 +39,72 @@ body {
     position: absolute;
     top: 10px;
     left: 5px;
+	background-image: url(../img/sprite.png);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	border: none;
+	width: 20px;
+	height: 20px;    
 }
 
 #search_button_twitter{
     position: absolute;
     top: 10px;
     left: 30px;
+	background-image: url(../img/sprite.png);
+	background-repeat: no-repeat;
+	background-position: -22px 0px;
+	border: none;
+	width: 20px;
+	height: 20px;      
 }
 
 #search_button_facebook{
     position: absolute;
     top: 10px;
     left: 55px;
+	background-image: url(../img/sprite.png);
+	background-repeat: no-repeat;
+	background-position: -44px 0px;
+	border: none;
+	width: 20px;
+	height: 20px;      
 }
 
 #search_button_quora{
     position: absolute;
     top: 10px;
     left: 80px;
+	background-image: url(../img/sprite.png);
+	background-repeat: no-repeat;
+	background-position: -66px 0px;
+	border: none;
+	width: 20px;
+	height: 20px;      
 }
 
 #search_button_wikipedia{
     position: absolute;
     top: 10px;
     left: 105px;
+	background-image: url(../img/sprite.png);
+	background-repeat: no-repeat;
+	background-position: -88px 0px;
+	border: none;
+	width: 20px;
+	height: 20px;      
 }
 
 #button_clear{
     position: absolute;
     top: 12px;
     left: 555px;
+	background-image: url(../img/sprite.png);
+	background-repeat: no-repeat;
+	background-position: -110px 0px;
+	border: none;
+	width: 14px;
+	height: 18px;      
 }
 
 #search_bar_div{

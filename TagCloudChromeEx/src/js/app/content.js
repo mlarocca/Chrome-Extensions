@@ -179,7 +179,7 @@ function (request, sender, sendResponse) {
             minCounter = 1.7976931348623157E+10308,
             maxCounter = 0;
         var i, n, w,
-            word_re = /^[a-z]{2}[a-z\-]*[a-z]+$/i,   //Words, at least 3 characters long, possibly separated by hiphen
+            word_re = /^[a-z]{1}[a-z\-]*[a-z]+$/i,   //Words, at least 2 characters long, possibly separated by hiphen
             tmp = $("body").text();
        
         if (tmp){

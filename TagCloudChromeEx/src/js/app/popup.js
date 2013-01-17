@@ -24,7 +24,7 @@ myApp.service('tagCloudService', function() {
                                                       MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
                                                       MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
                                                       MAX_TAGS: MAX_TAGS,
-                                                      BLACKLIST: WORD_BLACKLIST 
+                                                      BLACKLIST: WORD_BLACKLIST["en"]
                                                     },
                                             function (response) {
                                                 

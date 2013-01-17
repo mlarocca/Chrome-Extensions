@@ -9,13 +9,21 @@ var MAX_TAGS = 100;
       * Sublist of the 100 most common words used in English.<br>
       * Used to avoid including them in the tag cloud.
       */
-var WORD_BLACKLIST =    {   "the": true, "or": true, "and": true, "for": true, "you": true, "your": true, "our": true,
-                            "yours": true, "ours": true, "mine": true, "my": true, "that": true,
-                            "this": true, "those": true, "these": true, "has": true, "have": true, "had": true, 
-                            "are": true, "am": true, "not": true, "no": true, "but": true, "his": true, "her": true, 
-                            "him": true, "its": true, "in": true, "into": true, "my": true, "who": true, "us": true, 
-                            "which": true, "when": true, "how": true, "date": true, "day": true, "with": true,
-                            "on": true, "an": true, "a": true
+var WORD_BLACKLIST =    {
+                            "en":   {   "the": true, "be": true, "to": true, "of": true, "and": true,
+                                        "a": true, "in": true, "that": true, "have": true, "I": true,
+                                        "it": true, "for": true, "not": true, "on": true, "with": true,
+                                        "he": true, "as": true, "you": true, "do": true, "at": true,
+                                        "this": true, "but": true, "his": true, "by": true, "from": true,
+                                        "they": true, "we": true, "her": true, "hers": true, "she": true, "or": true,
+                                        "an": true, "my": true, "mine": true, "one": true,"would": true, "their": true, 
+                                        "theirs": true, "so": true, "up": true, "out": true, "if": true, "about": true,
+                                        "who": true, "get": true, "which": true, "me": true, "when": true,
+                                        "no": true, "just": true, "him": true, "into": true, "your": true, "yours": true,
+                                        "them": true, "than": true, "then": true, "its": true, "over": true,
+                                        "also": true, "two": true, "how": true, "our": true, "ours": true, "day": true, 
+                                        "days": true, "us": true, "is": true, "are": true, "has": true
+                                    }
                         }
 
 var SEARCH_API_URL = {  "search_Google" : "http://www.google.com/search?q=",
