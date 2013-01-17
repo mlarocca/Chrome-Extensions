@@ -1,5 +1,17 @@
-﻿
-    
+﻿//<GOOGLE ANALYTICS>
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-37750635-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = 'https://ssl.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+//</GOOGLE ANALYTICS>  
+ 
 /** Service #1 tagCloudService<br>
   * This service is in charge of parsing the HTML of the current tab and creating a tag cloud.<br>
   * Calls a model on the selected tab by sending a message to the tabs handler
@@ -19,18 +31,32 @@ myApp.service('tagCloudService', function() {
             {
                 model.title = tabs[0].title;
                 model.url = tabs[0].url;
+                
+                //First, detect page language
+                chrome.tabs.detectLanguage( null,
+                                            function(language) {
+                                                //Once detected, choose the appropriate black list
 
-                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', 
-                                                      MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
-                                                      MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
-                                                      MAX_TAGS: MAX_TAGS,
-                                                      BLACKLIST: WORD_BLACKLIST["en"]
-                                                    },
-                                            function (response) {
-                                                
-                                                model.tagCloud = response;
-                                                callback(model);
+                                                if (typeof WORD_BLACKLIST[language] === "undefined"){
+                                                    //If language isn't supported, use the default one (English)
+                                                    language = "en";
+                                                }
+
+                                                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', 
+                                                          MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
+                                                          MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
+                                                          MAX_TAGS: MAX_TAGS,
+                                                          BLACKLIST: WORD_BLACKLIST[language]
+                                                        },
+                                                function (response) {
+                                                    
+                                                    model.tagCloud = response;
+                                                    callback(model);
+                                                });
+                                            
                                             });
+                
+
             }
 
         });

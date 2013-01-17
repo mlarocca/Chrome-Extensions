@@ -23,7 +23,26 @@ var WORD_BLACKLIST =    {
                                         "them": true, "than": true, "then": true, "its": true, "over": true,
                                         "also": true, "two": true, "how": true, "our": true, "ours": true, "day": true, 
                                         "days": true, "us": true, "is": true, "are": true, "has": true
+                                    },
+                                    
+                            "it":   {
+                                        "non": true, "di": true, "che": true, "è": true, "e": true, "é": true,
+                                        "e'": true, "la": true, "il": true, "un": true, "una": true, "uno": true,
+                                        "un'": true, "a": true, "per": true, "in": true, "mi": true, "sono": true,
+                                        "ho": true, "ma": true, "l": true, "lo": true, "ha": true, "le": true,
+                                        "si": true, "ti": true, "i": true, "con": true, "se": true, "io": true,
+                                        "come": true, "da": true, "dal": true, "dai": true,
+                                        "ci": true, "no": true, "questo": true, "questa": true,
+                                        "questi": true, "qui": true, "hai": true, "del": true, "tu": true, "sì": true,
+                                        "me": true, "più": true, "al": true, "mio": true, "mia": true, "miei": true,
+                                        "c'": true, "lei": true, "te": true, "gli": true, "della": true, "mia": true,
+                                        "ne": true, "so": true, "o": true, "alla": true, "dei": true, "quello": true,
+                                        "va": true, "lui": true, "nel": true, "suo": true, "sua": true, "suoi": true,
+                                        "oh": true, "oh!": true, "tuo": true, "tua": true, "tuoi": true, "hanno": true,
+                                        "noi": true, "sta": true, "due": true, "mi": true, "il": true, "ai": true,
+                                        "de": true, "sti": true
                                     }
+           
                         }
 
 var SEARCH_API_URL = {  "search_Google" : "http://www.google.com/search?q=",
