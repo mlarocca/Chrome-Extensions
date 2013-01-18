@@ -27,6 +27,8 @@ myApp.service('tagCloudService', function() {
 
         chrome.tabs.query({'active': true},
         function (tabs) {
+            var blacklist;
+            
             if (tabs.length > 0)
             {
                 model.title = tabs[0].title;
@@ -36,17 +38,17 @@ myApp.service('tagCloudService', function() {
                 chrome.tabs.detectLanguage( null,
                                             function(language) {
                                                 //Once detected, choose the appropriate black list
-
-                                                if (typeof WORD_BLACKLIST[language] === "undefined"){
+                                                blacklist = WORD_BLACKLIST(language);
+                                                if (typeof blacklist === "undefined"){
                                                     //If language isn't supported, use the default one (English)
-                                                    language = "en";
+                                                    blacklist = WORD_BLACKLIST("en");
                                                 }
 
                                                 chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', 
                                                           MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
                                                           MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
                                                           MAX_TAGS: MAX_TAGS,
-                                                          BLACKLIST: WORD_BLACKLIST[language]
+                                                          BLACKLIST: blacklist
                                                         },
                                                 function (response) {
                                                     
@@ -108,8 +110,12 @@ myApp.service('tagCloudRender', function() {
                 })
                 .text(function(d) { return d.text; })
                 .on("click", function(d) {
-                    if (onTagClick && typeof(onTagClick) === 'function'){
-                        onTagClick(d.text);
+                    if (d3.event.shiftKey) {
+                        console.log(d.text);
+                    } else {
+                        if (onTagClick && typeof(onTagClick) === 'function'){
+                            onTagClick(d.text);
+                        }
                     }
                 });
         } 
