@@ -5,6 +5,8 @@ _gaq.push(['_setAccount', 'UA-37750635-1']);
 _gaq.push(['_trackPageview']);
 
 (function() {
+  "use strict";
+  
   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
   ga.src = 'https://ssl.google-analytics.com/ga.js';
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
@@ -22,41 +24,53 @@ _gaq.push(['_trackPageview']);
   * @param {Function} callback The callback function to be called once the model has returned its result.
   */
 myApp.service('tagCloudService', function() {
-    this.getInfo = function(callback) {
-        var model = {};
+    "use strict";
 
+    this.createTagCloud = function(tabs, callback){
+    
+        //First, detect page language
+        chrome.tabs.detectLanguage( null,
+                                    function(language) {
+                                        //Once detected, choose the appropriate black list
+                                        var blacklist = WORD_BLACKLIST(language);
+                                        if (typeof blacklist === "undefined"){
+                                            //If language isn't supported, use the default one (English)
+                                            blacklist = WORD_BLACKLIST("en");
+                                        }
+
+                                        chrome.tabs.sendMessage(tabs[0].id, { 'action': 'CreatePageTagCloud', 
+                                                                              MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
+                                                                              MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
+                                                                              MAX_TAGS: MAX_TAGS,
+                                                                              BLACKLIST: blacklist
+                                                                            },
+                                                                callback);
+                                                                        
+                                    });        
+    };
+
+        /** Checks if a tag cloud has been already computed for the page;
+          * if it isn't call the service method to create it
+          *
+          */    
+    this.getTagCloud = function(callback) {
+        var that = this;
+        
         chrome.tabs.query({'active': true},
         function (tabs) {
-            var blacklist;
             
             if (tabs.length > 0)
-            {
-                model.title = tabs[0].title;
-                model.url = tabs[0].url;
-                
-                //First, detect page language
-                chrome.tabs.detectLanguage( null,
-                                            function(language) {
-                                                //Once detected, choose the appropriate black list
-                                                blacklist = WORD_BLACKLIST(language);
-                                                if (typeof blacklist === "undefined"){
-                                                    //If language isn't supported, use the default one (English)
-                                                    blacklist = WORD_BLACKLIST("en");
-                                                }
-
-                                                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'PageTagCloud', 
-                                                          MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
-                                                          MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
-                                                          MAX_TAGS: MAX_TAGS,
-                                                          BLACKLIST: blacklist
-                                                        },
-                                                function (response) {
-                                                    
-                                                    model.tagCloud = response;
-                                                    callback(model);
-                                                });
+            {                
+                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'CheckPageTagCloud'},
+                                        function (response) {
                                             
-                                            });
+                                            if (!response.tagCloud){
+                                                that.createTagCloud(tabs, callback);
+                                            }else {
+                                                callback(response);
+                                            }
+                                        });
+                
                 
 
             }
@@ -71,22 +85,38 @@ myApp.service('tagCloudService', function() {
   *
   * 
   * @method tagCloudRender
-  * @param {Array} tags The array of tags ({Object}) created by the model.
+  * @param {Object} model The model for the Tag Cloud.<br>
+                    The Object MUST have 2 fields:
+                    <ul>
+                        <li>An array of tags ({Object}) created by the model</li>
+                        <li>An Object with one entry for each tag, where the value associated with it 
+                            indicates if the tag has been highlighted or not</li>
+                    </ul>
   * @param {Number} width The width of the tag cloud DOM element.
   * @param {Number} height The height of the tag cloud DOM element.
   * @param {Function} onTagClick The callback that will be called when a tag is clicked
+  * @param {Function} onTagShiftClick The callback that will be called when a tag is clicked while Shift key is pressed
+  * @param {Function} onTagAltClick The callback that will be called when a tag is clicked while Alt key is pressed
+  *
+  * <b>WARNING</b>: The order of precedence for the event is: Shift+click, Alt+click, click
   */
 myApp.service('tagCloudRender', 
                 function() {
-
-                    this.render = function (tags, width, height, onTagClick, onTagShiftClick){
-                        if (!tags){
+                    "use strict";
+                    
+                    this.render = function (model, width, height, onTagClick, onTagShiftClick, onTagAltClick){
+                        var TAG_HIGHLIGHT_COLOR = "red";
+                        
+                        if (!model){
                             return;
                         }
+                        var tagCloud = model.tagCloud,
+                            highlightedTags = model.highlightedTags;
+                            console.log(highlightedTags);
                         var fill = d3.scale.category20();
                                         
                         d3.layout.cloud().size([width, height])
-                          .words(tags)
+                          .words(tagCloud)
                           .rotate(function() { return ~~(Math.random() * 2) * 90; })
                           .font("Impact")
                           .fontSize(function(d) { return d.size; })
@@ -107,6 +137,14 @@ myApp.service('tagCloudRender',
                                 .style("font-size", function(d) { return d.size + "px"; })
                                 .style("font-family", "Impact")
                                 .style("fill", function(d, i) { return fill(i); })
+                                .attr("stroke-width", 2)
+                                .attr("stroke", function(d){
+                                                    if (highlightedTags[d.text]){
+                                                        return TAG_HIGHLIGHT_COLOR;
+                                                    } else {
+                                                        return "none";
+                                                    }
+                                                })
                                 .attr("text-anchor", "middle")
                                 .attr("transform", function(d) {
                                   return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -115,7 +153,11 @@ myApp.service('tagCloudRender',
                                 .on("click", function(d) {
                                                 var tag = d.text;
                                                 if (d3.event.shiftKey) {
+                                                    d3.select(this).attr("stroke", TAG_HIGHLIGHT_COLOR).attr("stroke-width", 2);
                                                     onTagShiftClick(tag);
+                                                } else if (d3.event.altKey) {
+                                                    d3.select(this).attr("stroke", "none");
+                                                    onTagAltClick(tag);
                                                 } else if (onTagClick && typeof(onTagClick) === 'function'){
                                                     onTagClick(tag);
                                                 }
@@ -128,9 +170,10 @@ myApp.service('tagCloudRender',
                 
 myApp.service('tagHighlight', 
                 function() {
-
+                    "use strict";
+                    
                     this.highlight = 
-                            function(text, className) {
+                            function(text, highlightClassName, wordClassName) {
                             
                                 chrome.tabs.query({'active': true},
                                         function (tabs) {
@@ -138,29 +181,27 @@ myApp.service('tagHighlight',
                                                  chrome.tabs.insertCSS(tabs[0].id, {code: "." + TAG_CLOUD_HIGHLIGH_CLASS + "{background: orange;}"});
                                                  chrome.tabs.sendMessage(tabs[0].id, { 'action': 'HighlightTag', 
                                                           tag: text, 
+                                                          highlightClassName: highlightClassName,
+                                                          wordClassName: wordClassName
+                                                          
+                                                        });
+                                            }
+                                        });
+                            };
+                            
+                    this.removeHighlight = 
+                            function(text, className) {
+                            
+                                chrome.tabs.query({'active': true},
+                                        function (tabs) {
+                                            if (tabs.length > 0) {
+                                                 chrome.tabs.sendMessage(tabs[0].id, { 'action': 'RemoveHighlight', 
                                                           className: className
                                                         });
                                             }
                                         });
-                            
-                                /*
-                                var that = this;
-                                var regex = new RegExp(text, "gi");
-                                
-                                    jQueryNode.each(function () {
-                                        this.innerHTML = this.innerHTML.replace(regex, function(matched) {
-                                            return "<span class=\"" + className + "\">" + matched + "</span>";
-                                        });
-                                    });
-/*                                    
-                                if  (jQueryNode.nodeType === Node.TEXT_NODE && regex.test(this.nodeValue)){
-
-                                }else {
-                                    jQueryNode.children().each( function(){
-                                                                    that.highlight($(this), text, className);
-                                                                });
-                                }*/
                             };
+                            
                 });
 
 /** PageController
@@ -176,9 +217,10 @@ myApp.service('tagHighlight',
   */
 myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRender, tagHighlight) {
     
-    tagCloudService.getInfo(
+    tagCloudService.getTagCloud(
         (function () {
-        
+            "use strict";
+            
             /** @method search
               * @private
               *
@@ -197,19 +239,43 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
             }    
         
             //Callback callable only once
-            var callback = function(info){
-                var highlightedWords = {};
+            var callback = function(model){
+                var highlightedTags = model.highlightedTags;
                 var width = window.innerWidth;
-                var height = window.innerHeight - $('#cloud_div').position().top;            
-                tagCloudRender.render(info.tagCloud, width, height, 
+                var height = window.innerHeight - $('#cloud_div').position().top;
+                
+                function wordHighlightClass(word){
+                    return TAG_CLOUD_HIGHLIGH_CLASS + "-" + word;
+                }
+                
+                tagCloudRender.render(model, width, height, 
+                                        /**
+                                          * @method onTagClick
+                                          * Anonymus function: The callback that will be called when a tag is clicked
+                                          */
                                         function(text){
                                             $("#search_bar").val($("#search_bar").val() + " " + text); 
                                         },
+                                        /**
+                                          * @method onTagShiftClick
+                                          * Anonymus function: The callback that will be called 
+                                          * when a tag is clicked while Shift key is pressed
+                                          */                                        
                                         function(text) {
-                                            if (typeof highlightedWords[text] === "undefined"){
-                                                tagHighlight.highlight(text, TAG_CLOUD_HIGHLIGH_CLASS);
+                                            if (!highlightedTags[text]){
+                                                tagHighlight.highlight(text, TAG_CLOUD_HIGHLIGH_CLASS, wordHighlightClass(text));
                                             }
-                                        }
+                                        },
+                                        /**
+                                          * @method onTagAltClick
+                                          * Anonymus function:  The callback that will be called when 
+                                          * a tag is clicked while Alt key is pressed
+                                          */                                            
+                                        function(text) {
+                                            if (highlightedTags[text]){
+                                                tagHighlight.removeHighlight(text, wordHighlightClass(text));
+                                            }
+                                        }                                        
                                     );
                                         
                         
