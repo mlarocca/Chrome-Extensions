@@ -76,52 +76,92 @@ myApp.service('tagCloudService', function() {
   * @param {Number} height The height of the tag cloud DOM element.
   * @param {Function} onTagClick The callback that will be called when a tag is clicked
   */
-myApp.service('tagCloudRender', function() {
-    this.render = function (tags, width, height, onTagClick){
-        if (!tags){
-            return;
-        }
-        var fill = d3.scale.category20();
-                        
-        d3.layout.cloud().size([width, height])
-          .words(tags)
-          .rotate(function() { return ~~(Math.random() * 2) * 90; })
-          .font("Impact")
-          .fontSize(function(d) { return d.size; })
-          .on("end", draw)
-          .start();
+myApp.service('tagCloudRender', 
+                function() {
 
-        function draw(words) {
-            d3.select("#cloud_div").append("svg")
-                .attr("width", width)
-                .attr("height", height)
-              .append("g")
-                .attr("transform", "translate(" + (Math.floor(width / 2) - MIN_LABEL_SIZE/2) + "," + Math.floor(height / 2) + ")")
-              .selectAll("text")
-                .data(words)
-              .enter().append("text")
-                .attr("class", "tag")
-                .style("font-size", function(d) { return d.size + "px"; })
-                .style("font-family", "Impact")
-                .style("fill", function(d, i) { return fill(i); })
-                .attr("text-anchor", "middle")
-                .attr("transform", function(d) {
-                  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .text(function(d) { return d.text; })
-                .on("click", function(d) {
-                    if (d3.event.shiftKey) {
-                        console.log(d.text);
-                    } else {
-                        if (onTagClick && typeof(onTagClick) === 'function'){
-                            onTagClick(d.text);
+                    this.render = function (tags, width, height, onTagClick, onTagShiftClick){
+                        if (!tags){
+                            return;
                         }
-                    }
-                });
-        } 
-    };
-});
+                        var fill = d3.scale.category20();
+                                        
+                        d3.layout.cloud().size([width, height])
+                          .words(tags)
+                          .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                          .font("Impact")
+                          .fontSize(function(d) { return d.size; })
+                          .on("end", draw)
+                          .start();
 
+                        function draw(words) {
+                            
+                            d3.select("#cloud_div").append("svg")
+                                .attr("width", width)
+                                .attr("height", height)
+                              .append("g")
+                                .attr("transform", "translate(" + (Math.floor(width / 2) - MIN_LABEL_SIZE/2) + "," + Math.floor(height / 2) + ")")
+                              .selectAll("text")
+                                .data(words)
+                              .enter().append("text")
+                                .attr("class", "tag")
+                                .style("font-size", function(d) { return d.size + "px"; })
+                                .style("font-family", "Impact")
+                                .style("fill", function(d, i) { return fill(i); })
+                                .attr("text-anchor", "middle")
+                                .attr("transform", function(d) {
+                                  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                                })
+                                .text(function(d) { return d.text; })
+                                .on("click", function(d) {
+                                                var tag = d.text;
+                                                if (d3.event.shiftKey) {
+                                                    onTagShiftClick(tag);
+                                                } else if (onTagClick && typeof(onTagClick) === 'function'){
+                                                    onTagClick(tag);
+                                                }
+                                                
+                                            });
+                        } 
+                    };
+                });
+
+                
+myApp.service('tagHighlight', 
+                function() {
+
+                    this.highlight = 
+                            function(text, className) {
+                            
+                                chrome.tabs.query({'active': true},
+                                        function (tabs) {
+                                            if (tabs.length > 0) {
+                                                 chrome.tabs.insertCSS(tabs[0].id, {code: "." + TAG_CLOUD_HIGHLIGH_CLASS + "{background: orange;}"});
+                                                 chrome.tabs.sendMessage(tabs[0].id, { 'action': 'HighlightTag', 
+                                                          tag: text, 
+                                                          className: className
+                                                        });
+                                            }
+                                        });
+                            
+                                /*
+                                var that = this;
+                                var regex = new RegExp(text, "gi");
+                                
+                                    jQueryNode.each(function () {
+                                        this.innerHTML = this.innerHTML.replace(regex, function(matched) {
+                                            return "<span class=\"" + className + "\">" + matched + "</span>";
+                                        });
+                                    });
+/*                                    
+                                if  (jQueryNode.nodeType === Node.TEXT_NODE && regex.test(this.nodeValue)){
+
+                                }else {
+                                    jQueryNode.children().each( function(){
+                                                                    that.highlight($(this), text, className);
+                                                                });
+                                }*/
+                            };
+                });
 
 /** PageController
   *
@@ -134,7 +174,7 @@ myApp.service('tagCloudRender', function() {
   * @param {Object} tagCloudRender The service in charge of rendering the tag cloud
   *                                (defined above, automatically passed by AngularJS)
   */
-myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRender) {
+myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRender, tagHighlight) {
     
     tagCloudService.getInfo(
         (function () {
@@ -158,13 +198,19 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
         
             //Callback callable only once
             var callback = function(info){
-                
+                var highlightedWords = {};
                 var width = window.innerWidth;
                 var height = window.innerHeight - $('#cloud_div').position().top;            
                 tagCloudRender.render(info.tagCloud, width, height, 
                                         function(text){
                                             $("#search_bar").val($("#search_bar").val() + " " + text); 
-                                        });
+                                        },
+                                        function(text) {
+                                            if (typeof highlightedWords[text] === "undefined"){
+                                                tagHighlight.highlight(text, TAG_CLOUD_HIGHLIGH_CLASS);
+                                            }
+                                        }
+                                    );
                                         
                         
                 $("#search_button_google").click(   function(event){

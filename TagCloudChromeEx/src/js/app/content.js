@@ -1,4 +1,60 @@
-﻿//alert('content script loaded');
+﻿jQuery.fn.highlight = function(pattern, wholeWordOnly, highlightClassName, specificClassName) {
+    var upperCasePattern = pattern.toUpperCase();
+    var regex = wholeWordOnly ? new RegExp("(^" + pattern + "[\\W]+)|([\\W]+" + pattern + "[\\W]+)|([\\W]+" + pattern + "$)|(^"+ pattern + "$)", "gi") 
+                              : new RegExp(pattern, "gi");
+    
+    function innerHighlight(node) {
+        var skip = 0;
+        
+        
+        if (node.nodeType == Node.TEXT_NODE) {
+            var pos = node.data.regexIndexOf(regex);
+            if (pos >= 0) {
+                if (wholeWordOnly){
+                    pos = node.data.toUpperCase().indexOf(upperCasePattern);
+                }
+                
+                var spannode = document.createElement('span');
+                spannode.className = highlightClassName + (specificClassName ? " " + specificClassName : "");
+                var middlebit = node.splitText(pos);
+                var endbit = middlebit.splitText(pattern.length);
+                var middleclone = middlebit.cloneNode(true);
+                spannode.appendChild(middleclone);
+                middlebit.parentNode.replaceChild(spannode, middlebit);
+                skip = 1;
+            }
+        }
+        else if (node.nodeType == Node.ELEMENT_NODE && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+            for (var i = 0; i < node.childNodes.length; ++i) {
+                i += innerHighlight(node.childNodes[i]);
+            }
+        }
+        return skip;
+    }
+    
+    return this.length && pattern && pattern.length ?   this.each(function() {
+                                                            innerHighlight(this);
+                                                        })
+                                                    : this;
+};
+
+String.prototype.regexIndexOf = function(regex, startpos) {
+    var indexOf = this.substring(startpos || 0).search(regex);
+    return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+}
+
+jQuery.fn.removeHighlight = function(highlightClassName) {
+    return this.find("span." + highlightClassName).each(function() {
+                                                            this.parentNode.firstChild.nodeName;
+                                                            with (this.parentNode) {
+                                                                replaceChild(this.firstChild, this);
+                                                                normalize();
+                                                            }
+                                                        }).end();
+};
+
+
+//alert('content script loaded');
 /** @method makeFixedSizeMaxHeap
   * @private
   * Creates a FixedSizeMaxHeap.
@@ -171,7 +227,7 @@ chrome.extension.onMessage.addListener(
 function (request, sender, sendResponse) {
     "use strict";
     
-    if (request.action == 'PageTagCloud') {
+    if (request.action === 'PageTagCloud') {
         var tagCloud = makeFixedSizeMaxHeap(request.MAX_TAGS);
         var blackList = request.BLACKLIST || {};
         
@@ -224,8 +280,18 @@ function (request, sender, sendResponse) {
                                               Math.log(maxCounter - minCounter + 1) * 
                                               (request.MAX_LABEL_SIZE - request.MIN_LABEL_SIZE) );
         }
-
-
+        
         sendResponse(tagCloud);
+    } else if (request.action === 'HighlightTag') {
+        var tag = request.tag;
+        var className = request.className;
+        
+        $("body").highlight(tag, true, className);       
+
+        var firstFoundTerm = $("." + className + ":first");
+        if (firstFoundTerm.length > 0) {
+             $('html').scrollTop(firstFoundTerm.offset().top);
+        }
+                                   
     }
 });

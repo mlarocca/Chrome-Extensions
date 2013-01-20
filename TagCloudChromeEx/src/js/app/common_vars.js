@@ -126,12 +126,13 @@ function WORD_BLACKLIST(language) {
     }
 }    
 
-var SEARCH_API_URL = {  "search_Google" : "http://www.google.com/search?q=",
+var SEARCH_API_URL = {  
+                        "search_Google" : "http://www.google.com/search?q=",
                         "search_Twitter" : "https://twitter.com/search?q=",
                         "search_Facebook" : "https://www.facebook.com/search/results.php?q=",
                         "search_Quora" : "http://api.quora.com/search?q=",
                         "search_Wikipedia" : "http://wikipedia.org/w/index.php?search="
-                    };
+                     };
                     
 var TRANSLATE_API_URL = {  "translate_Google" : "http://translate.google.it/#auto/" };
 
@@ -140,3 +141,12 @@ var TRANSLATE_API_URL = {  "translate_Google" : "http://translate.google.it/#aut
     MUST match the list in the select box inside options.html
   */
 var ALLOWED_LANGUAGES = {"en": true, "fr": true, "it": true, "de": true, "ru": true, "es": true, "pt": true, "zh-CN": true, "ja":true};
+
+
+/** @property TAG_CLOUD_HIGHLIGH_CLASS
+    @readonly
+    
+    Name of the class for highlighted words inside the text
+    
+  */
+var TAG_CLOUD_HIGHLIGH_CLASS = "tag-cloud-highlight";
