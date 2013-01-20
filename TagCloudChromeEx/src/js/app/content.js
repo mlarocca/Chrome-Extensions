@@ -55,10 +55,14 @@
 
         return this.find("span." + highlightClassName).each(function() {
                                                                 //this.parentNode.firstChild.nodeName;
-                                                                //with (this.parentNode) {
+                                                                
                                                                 this.parentNode.replaceChild(this.firstChild, this);
-                                                                this.parentNode.normalize();
-                                                                //}
+                                                                try{
+                                                                    this.parentNode.normalize();
+                                                                }catch(e){
+                                                                    //Nothing to do
+                                                                }
+                                                                
                                                             }).end();
     };
 
@@ -328,29 +332,31 @@
             tag = request.tag;
             var highlightClassName = request.highlightClassName,
                 wordClassName = request.wordClassName;
+            
             window.highlightedTags[tag] = true;
             $("body").highlight(tag, true, highlightClassName, wordClassName);       
 
             //Scroll to the first newly highlighetd word
             var firstFoundTerm = $("." + (wordClassName ? wordClassName : highlightClassName) + ":first");
-            
-            
+
             if (firstFoundTerm.length > 0) {
-                 $('html').scrollTop(firstFoundTerm.offset().top);
+                var targetOffset = firstFoundTerm.offset().top;
+                $('html,body').animate({scrollTop: targetOffset}, 1000);
             }
+            
+            sendResponse(window.highlightedTags);
             return ;
             
         } else if (request.action === 'RemoveHighlight') {
+            
             tag = request.tag;
             var className = request.className;
             window.highlightedTags[tag] = false;
+            
             $("body").removeHighlight(className);       
             
+            sendResponse(window.highlightedTags);
             return ;                           
-        } else if (request.action === 'isHighlighted?') {
-            tag = request.tag;
-            
-            sendResponse(window.highlightedTags[tag]);
         }
     });
 })();

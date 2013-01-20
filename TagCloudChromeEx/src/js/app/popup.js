@@ -79,12 +79,12 @@ myApp.service('tagCloudService', function() {
     };
 });
 
-/** Service #2 tagCloudRender<br>
+/** Service #2 tagCloudRenderService<br>
   * This service is in charge of rendering the tag cloud.<br>
   * Calls a model on the selected tab by sending a message to the tabs handler
   *
   * 
-  * @method tagCloudRender
+  * @method tagCloudRenderService
   * @param {Object} model The model for the Tag Cloud.<br>
                     The Object MUST have 2 fields:
                     <ul>
@@ -100,19 +100,18 @@ myApp.service('tagCloudService', function() {
   *
   * <b>WARNING</b>: The order of precedence for the event is: Shift+click, Alt+click, click
   */
-myApp.service('tagCloudRender', 
+myApp.service('tagCloudRenderService', 
                 function() {
                     "use strict";
                     
                     this.render = function (model, width, height, onTagClick, onTagShiftClick, onTagAltClick){
-                        var TAG_HIGHLIGHT_COLOR = "red";
-                        
+                        var TAG_HIGHLIGHT_STROKE_COLOR = "black",
+                            TAG_HIGHLIGHT_FILL_COLOR = "red";
                         if (!model){
                             return;
                         }
                         var tagCloud = model.tagCloud,
                             highlightedTags = model.highlightedTags;
-                            console.log(highlightedTags);
                         var fill = d3.scale.category20();
                                         
                         d3.layout.cloud().size([width, height])
@@ -136,11 +135,13 @@ myApp.service('tagCloudRender',
                                 .attr("class", "tag")
                                 .style("font-size", function(d) { return d.size + "px"; })
                                 .style("font-family", "Impact")
-                                .style("fill", function(d, i) { return fill(i); })
-                                .attr("stroke-width", 2)
+                                .style("fill",  function(d, i) { 
+                                                    return fill(i);
+                                                })                  //Smaller sizes wouldn't be readable with a stroke width of 2 px 
+                                .attr("stroke-width", function(d){ return d.size < (MAX_LABEL_SIZE + MIN_LABEL_SIZE) / 2 ? 1 : 2 }) 
                                 .attr("stroke", function(d){
                                                     if (highlightedTags[d.text]){
-                                                        return TAG_HIGHLIGHT_COLOR;
+                                                        return TAG_HIGHLIGHT_STROKE_COLOR;
                                                     } else {
                                                         return "none";
                                                     }
@@ -152,12 +153,19 @@ myApp.service('tagCloudRender',
                                 .text(function(d) { return d.text; })
                                 .on("click", function(d) {
                                                 var tag = d.text;
-                                                if (d3.event.shiftKey) {
-                                                    d3.select(this).attr("stroke", TAG_HIGHLIGHT_COLOR).attr("stroke-width", 2);
-                                                    onTagShiftClick(tag);
+                                                if (d3.event.shiftKey ) {
+                                                    if (!highlightedTags[tag]) {
+                                                        
+                                                        d3.select(this).attr("stroke", TAG_HIGHLIGHT_STROKE_COLOR);
+                                                        onTagShiftClick(tag);
+                                                        highlightedTags[tag] = true;
+                                                    }
                                                 } else if (d3.event.altKey) {
-                                                    d3.select(this).attr("stroke", "none");
-                                                    onTagAltClick(tag);
+                                                    if (highlightedTags[tag]) {
+                                                        d3.select(this).attr("stroke", "none");
+                                                        onTagAltClick(tag);
+                                                        highlightedTags[tag] = false;
+                                                    }                                                                               
                                                 } else if (onTagClick && typeof(onTagClick) === 'function'){
                                                     onTagClick(tag);
                                                 }
@@ -168,7 +176,7 @@ myApp.service('tagCloudRender',
                 });
 
                 
-myApp.service('tagHighlight', 
+myApp.service('tagHighlightService', 
                 function() {
                     "use strict";
                     
@@ -212,10 +220,10 @@ myApp.service('tagHighlight',
   * @param {Object} $scope The (AngularJS) scope on which the controller is called
   * @param {Object} tagCloudService The service in charge of page parsing and tag cloud creation
   *                                 (defined above, automatically passed by AngularJS)
-  * @param {Object} tagCloudRender The service in charge of rendering the tag cloud
+  * @param {Object} tagCloudRenderService The service in charge of rendering the tag cloud
   *                                (defined above, automatically passed by AngularJS)
   */
-myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRender, tagHighlight) {
+myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRenderService, tagHighlightService) {
     
     tagCloudService.getTagCloud(
         (function () {
@@ -240,7 +248,7 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
         
             //Callback callable only once
             var callback = function(model){
-                var highlightedTags = model.highlightedTags;
+                
                 var width = window.innerWidth;
                 var height = window.innerHeight - $('#cloud_div').position().top;
                 
@@ -248,7 +256,7 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                     return TAG_CLOUD_HIGHLIGH_CLASS + "-" + word;
                 }
                 
-                tagCloudRender.render(model, width, height, 
+                tagCloudRenderService.render(model, width, height, 
                                         /**
                                           * @method onTagClick
                                           * Anonymus function: The callback that will be called when a tag is clicked
@@ -262,9 +270,8 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                           * when a tag is clicked while Shift key is pressed
                                           */                                        
                                         function(text) {
-                                            if (!highlightedTags[text]){
-                                                tagHighlight.highlight(text, TAG_CLOUD_HIGHLIGH_CLASS, wordHighlightClass(text));
-                                            }
+                                            tagHighlightService.highlight(text, TAG_CLOUD_HIGHLIGH_CLASS, wordHighlightClass(text));
+                                            
                                         },
                                         /**
                                           * @method onTagAltClick
@@ -272,10 +279,7 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                           * a tag is clicked while Alt key is pressed
                                           */                                            
                                         function(text) {
-                                            if (highlightedTags[text]){
-                                                tagHighlight.removeHighlight(text, wordHighlightClass(text));
-                                            }
-                                        }                                        
+                                            tagHighlightService.removeHighlight(text, wordHighlightClass(text));                                        }                                        
                                     );
                                         
                         
