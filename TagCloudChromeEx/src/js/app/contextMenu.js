@@ -24,10 +24,11 @@
 
         var id = info.menuItemId;
         if (/^search_[\S]*/.test(id)){
+            //search menu item clicked
             search(SEARCH_API_URL[id], info.selectionText.replace(/\s+/g, "+"));
-            //search menu item clicked
+            
         }else if (/^translate_[\S]*/.test(id)){
-            //search menu item clicked
+            //translate menu item clicked
             var language;
             try{
                 language = OptionsHandler.loadOption("target_language");// localStorage["TagCloud_Ext_target_language"];
@@ -38,6 +39,13 @@
                 language = OptionsHandler.getDefaultValue("target_language");    //English by default
             }
             search(TRANSLATE_API_URL[id] + language + "/" , info.selectionText);
+        
+        }else if (id === "remove_highlighting"){
+
+            chrome.tabs.sendMessage(tab.id, { 
+                                                'action': 'removeAllHighlighting',
+                                                'className': TAG_CLOUD_HIGHLIGH_CLASS
+                                            });
         }
     }    
     chrome.contextMenus.onClicked.addListener(onClickHandler);
@@ -50,6 +58,7 @@
     }
 
     chrome.contextMenus.create({"contexts": ["selection"], "title": "Translate...", "id": "translate_Google"});
+    chrome.contextMenus.create({"contexts": ["page"], "title": "Remove Highlighting", "id": "remove_highlighting"});
 })();
 
 // Set up context menu tree at install time.

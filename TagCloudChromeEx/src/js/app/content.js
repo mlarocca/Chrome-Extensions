@@ -247,15 +247,17 @@
         "use strict";
         
         if (request.action === 'CreatePageTagCloud') {
-            var tagCloud = makeFixedSizeMaxHeap(request.MAX_TAGS);
             var model, 
-                highlightedTags = {};
+                highlightedTags = {},
+                tag, 
+                className;
+                
             var blackList = request.BLACKLIST || {};
-            var tag;
-            
-            var tagCloudDict = {}, 
+            var tagCloud = makeFixedSizeMaxHeap(request.MAX_TAGS),
+                tagCloudDict = {}, 
                 minCounter = 1.7976931348623157E+10308,
                 maxCounter = 0;
+                
             var i, n, w,
                 word_re = /^[a-z]{1}[a-z\-]*[a-z]+$/i,   //Words, at least 2 characters long, possibly separated by hiphen
                 tmp = $("body").text();
@@ -349,17 +351,18 @@
         } else if (request.action === 'RemoveHighlight') {
             
             tag = request.tag;
-            var className = request.className;
+            className = request.className;
             window.highlightedTags[tag] = false;
             
             $("body").removeHighlight(className);       
 
             return ;                           
-        } else if (request.action === 'USpdateHighlightedStatus') {
-            tag = request.tag;
-            value = request.value;
-            console.log(tag, value);
-            window.highlightedTags[tag] = value;
+        } else if (request.action === 'removeAllHighlighting') {
+            className = request.className;
+            $("body").removeHighlight(className);
+            for (tag in window.highlightedTags){
+                window.highlightedTags[tag] = false;
+            }
         }
     });
 })();
