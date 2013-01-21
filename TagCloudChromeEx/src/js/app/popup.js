@@ -103,6 +103,7 @@ myApp.service('tagCloudService', function() {
 myApp.service('tagCloudRenderService', 
                 function() {
                     "use strict";
+                    var currentTabId = null;
                     
                     this.render = function (model, width, height, onTagClick, onTagShiftClick, onTagAltClick){
                         var TAG_HIGHLIGHT_STROKE_COLOR = "black",
@@ -110,19 +111,12 @@ myApp.service('tagCloudRenderService',
                         if (!model){
                             return;
                         }
-                        var tagCloud = model.tagCloud,
-                            highlightedTags = model.highlightedTags;
+                        var tagCloud = model.tagCloud;
+                            
                         var fill = d3.scale.category20();
-                                        
-                        d3.layout.cloud().size([width, height])
-                          .words(tagCloud)
-                          .rotate(function() { return ~~(Math.random() * 2) * 90; })
-                          .font("Impact")
-                          .fontSize(function(d) { return d.size; })
-                          .on("end", draw)
-                          .start();
 
                         function draw(words) {
+                            
                             
                             d3.select("#cloud_div").append("svg")
                                 .attr("width", width)
@@ -140,7 +134,8 @@ myApp.service('tagCloudRenderService',
                                                 })                  //Smaller sizes wouldn't be readable with a stroke width of 2 px 
                                 .attr("stroke-width", function(d){ return d.size < (MAX_LABEL_SIZE + MIN_LABEL_SIZE) / 2 ? 1 : 2 }) 
                                 .attr("stroke", function(d){
-                                                    if (highlightedTags[d.text]){
+                                                    if (model.highlightedTags[d.text] === true){
+                                                        
                                                         return TAG_HIGHLIGHT_STROKE_COLOR;
                                                     } else {
                                                         return "none";
@@ -154,24 +149,38 @@ myApp.service('tagCloudRenderService',
                                 .on("click", function(d) {
                                                 var tag = d.text;
                                                 if (d3.event.shiftKey ) {
-                                                    if (!highlightedTags[tag]) {
-                                                        
-                                                        d3.select(this).attr("stroke", TAG_HIGHLIGHT_STROKE_COLOR);
+                                                    if (!model.highlightedTags[tag]) {
                                                         onTagShiftClick(tag);
-                                                        highlightedTags[tag] = true;
+                                                        d3.select(this).attr("stroke", TAG_HIGHLIGHT_STROKE_COLOR);
+                                                        model.highlightedTags[tag] = true;
+                                                        
                                                     }
                                                 } else if (d3.event.altKey) {
-                                                    if (highlightedTags[tag]) {
-                                                        d3.select(this).attr("stroke", "none");
+                                                    
+                                                    if (model.highlightedTags[tag]) {
                                                         onTagAltClick(tag);
-                                                        highlightedTags[tag] = false;
+                                                        d3.select(this).attr("stroke", "none");
+                                                        model.highlightedTags[tag] = false;
+                                                        
                                                     }                                                                               
                                                 } else if (onTagClick && typeof(onTagClick) === 'function'){
                                                     onTagClick(tag);
                                                 }
                                                 
                                             });
-                        } 
+                        }
+                                   
+                        d3.layout.cloud().size([width, height])
+                          .words(tagCloud)
+                          .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                          .font("Impact")
+                          .fontSize(function(d) { return d.size; })
+                          .on("end", draw)
+                          .start();
+                        
+                        
+                        
+                         
                     };
                 });
 
@@ -204,7 +213,8 @@ myApp.service('tagHighlightService',
                                         function (tabs) {
                                             if (tabs.length > 0) {
                                                  chrome.tabs.sendMessage(tabs[0].id, { 'action': 'RemoveHighlight', 
-                                                          className: className
+                                                            tag: text,
+                                                            className: className
                                                         });
                                             }
                                         });

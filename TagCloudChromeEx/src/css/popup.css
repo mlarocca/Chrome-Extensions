@@ -18,7 +18,7 @@ body {
    position: absolute;
     top: 5px;
     left: 130px;
-    width: 405px;
+    width: 395px;
     height: 20px;
     border: 2px solid #909090;
     border-radius: 8px;
@@ -98,7 +98,7 @@ body {
 #button_clear{
     position: absolute;
     top: 12px;
-    left: 555px;
+    left: 545px;
 	background-image: url(../img/sprite.png);
 	background-repeat: no-repeat;
 	background-position: -110px 0px;
@@ -127,4 +127,98 @@ body {
 .tag:hover{
     cursor: pointer;
     opacity: 0.5;
+}
+
+#helpShiftClickImg{
+	background-image: url(../img/help.png);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	border: none;
+	width: 240px;
+	height: 80px; 
+    margin-top: 5px;
+    margin-left: 10px;    
+}
+
+#helpAltClickImg{
+	background-image: url(../img/help.png);
+	background-repeat: no-repeat;
+	background-position: 0px -80px;
+	border: none;
+	width: 240px;
+	height: 80px; 
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+#helpClickImg{
+	background-image: url(../img/help.png);
+	background-repeat: no-repeat;
+	background-position: -194px 0px;
+	border: none;
+	width: 50px;
+	height: 80px;
+    margin-left: 10px;
+}
+
+#helpTagClickImg{
+	background-image: url(../img/help.png);
+	background-repeat: no-repeat;
+	background-position: 0px -160px;
+	border: none;
+	width: 90px;
+	height: 60px;
+    margin: 5px;
+}
+
+#helpBox{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    border-bottom-left-radius: 8px;
+    padding-left: 2px;
+}
+
+.helpText {
+    margin-top: 10px;
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: normal;
+	font: 16px/16px "Arial", "SansSerif";
+	letter-spacing: -1px;  
+    text-align: center;
+    font-weight: bold;
+}
+
+.helpRowText {
+    margin-left: auto;
+    margin-right: auto;
+    cursor: normal;
+	font: 16px/16px "Arial", "SansSerif";
+	letter-spacing: -1px;  
+    text-align: center;
+    font-weight: bold;
+}
+
+#bigPlus {
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: normal;
+	font: 48px/48px "Arial", "SansSerif"; 
+    text-align: center;
+    font-weight: bold;
+}
+
+.helpTab{
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+#helpContainer{
+    padding-left:0px;
+    padding-right:0px;
 }

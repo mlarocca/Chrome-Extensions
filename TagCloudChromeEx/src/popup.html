@@ -25,25 +25,70 @@
             <div id = "search_button_wikipedia" class="search_button" src = "img/wikipedia.png" data-placement="bottom" data-title="Search with Wikipedia" ></div>
             <input type="text" id="search_bar" title="Enter your query"/>
             <a role="button" href="#clearModal" data-toggle="modal"><div id = "button_clear" class="search_button" data-placement="left" data-title="Clear search bar"></div></a>
+            <a id="helpBox" role="button" href="#helpModal" data-toggle="modal" class="search_button" data-placement="left" data-title="Help!"><i class="icon-question-sign"></i></a>
         </div>        
         <div id="cloud_div" ng-controller="PageController">
         </div>
         
-        <!-- Modal -->
-        <div id="clearModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel"><img src = "img/warning.png" /> Warning!</h3>
-            
-          </div>
-          <div class="modal-body">
-            <p>Do you really want to clear the content of your search bar?</p>
-          </div>
-          <div class="modal-footer">
-            <button id="clearModal_close" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-            <button id="clearModal_OK" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
-          </div>
-        </div>        
+        <!-- Modal: clear search bar -->
+        <div id="clearModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="clearModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="clearModalLabel"><img src = "img/warning.png" /> Warning!</h3>
+                
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to clear the content of your search bar?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="clearModal_close" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                <button id="clearModal_OK" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">OK</button>
+            </div>
+        </div>
+        
+        <!-- Modal: HELP -->
+        <div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="helpModalLabel"><span id="status" class="label label-info">Instructions</span></h3>
+                
+            </div>
+            <div class="modal-body">
+                <div id="helpContainer" class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span3">
+                            <div class="row-fluid helpTab span12">
+                                <div id="helpTagClickImg"></div>
+                                <div class="helpText">Choose a Tag and move the mouse pointer over it...</div>
+                            </div>
+                            <div class="row-fluid span12">
+                                <div id="bigPlus">+</div>
+                            </div>
+                        </div>
+                        <div class="span9 helpTab">
+                            <div class ="row-fluid">
+                                <div id="helpShiftClickImg" class="span6"> </div>
+                                <div class="span3"><div class="helpText">Highlight the selected Tag in the page.</div></div>
+                            </div>
+                            <div class ="row-fluid" class="span6">
+                                <div class="helpRowText">--------------------------    or    --------------------------</div>
+                            </div>                            
+                            <div class ="row-fluid">
+                                <div id="helpAltClickImg" class="span6"> </div>
+                                <div class="span3"><div class="helpText">Remove previous highlight for the selected Tag.</div></div>
+                            </div>
+                            <div class ="row-fluid" class="span6">
+                                <div class="helpRowText">--------------------------    or    --------------------------</div>
+                            </div>                            
+                            <div class ="row-fluid" class="span6">
+                                <div id="helpClickImg" class="span6"></div>
+                                <div class="span3"><div class="helpText">Add the selected Tag text to the search bar.</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>            
     </body>
     
 </html>

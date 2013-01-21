@@ -343,8 +343,7 @@
                 var targetOffset = firstFoundTerm.offset().top;
                 $('html,body').animate({scrollTop: targetOffset}, 1000);
             }
-            
-            sendResponse(window.highlightedTags);
+
             return ;
             
         } else if (request.action === 'RemoveHighlight') {
@@ -354,9 +353,13 @@
             window.highlightedTags[tag] = false;
             
             $("body").removeHighlight(className);       
-            
-            sendResponse(window.highlightedTags);
+
             return ;                           
+        } else if (request.action === 'USpdateHighlightedStatus') {
+            tag = request.tag;
+            value = request.value;
+            console.log(tag, value);
+            window.highlightedTags[tag] = value;
         }
     });
 })();
