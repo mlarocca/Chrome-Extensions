@@ -129,8 +129,34 @@ body {
     opacity: 0.5;
 }
 
+.separator{
+    margin-top: 10px;
+}
+
+.hline{
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#hline-div {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
+#helpHeader {
+    padding-bottom: 0px;
+}
+
+#helpTab {
+    margin-bottom: 0px;
+}
+
 #helpShiftClickImg{
-	background-image: url(../img/help.png);
+	background-image: url(../img/help_sprite_A.jpg);
 	background-repeat: no-repeat;
 	background-position: 0px 0px;
 	border: none;
@@ -141,7 +167,7 @@ body {
 }
 
 #helpAltClickImg{
-	background-image: url(../img/help.png);
+	background-image: url(../img/help_sprite_A.jpg);
 	background-repeat: no-repeat;
 	background-position: 0px -80px;
 	border: none;
@@ -151,8 +177,8 @@ body {
     margin-left: 10px;
 }
 
-#helpClickImg{
-	background-image: url(../img/help.png);
+#helpLeftClickImg{
+	background-image: url(../img/help_sprite_A.jpg);
 	background-repeat: no-repeat;
 	background-position: -194px 0px;
 	border: none;
@@ -161,14 +187,122 @@ body {
     margin-left: 10px;
 }
 
-#helpTagClickImg{
-	background-image: url(../img/help.png);
+#helpRightClickImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: -164px 0px;
+	border: none;
+	width: 80px;
+	height: 80px;
+    margin-left: 12px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";    
+}
+
+#helpRightClickNoPlusImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: -194px 0px;
+	border: none;
+	width: 50px;
+	height: 80px;
+    margin-left: 12px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";    
+}
+
+#helpPlusImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: -164px 0px;
+	border: none;
+	width: 30px;
+	height: 80px; 
+}
+
+#helpTagClickImgSmall{
+	background-image: url(../img/help_sprite_A.jpg);
 	background-repeat: no-repeat;
 	background-position: 0px -160px;
 	border: none;
-	width: 90px;
+	width: 110px;
 	height: 60px;
     margin: 5px;
+}
+
+#helpTagClickImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px -160px;
+	border: none;
+	width: 120px;
+	height: 60px;
+    margin: 5px;
+}
+
+#helpTagUnClickImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: -120px -160px;
+	border: none;
+	width: 120px;
+	height: 60px;
+    margin: 5px;
+}
+
+#helpTagRightClickImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px -220px;
+	border: none;
+	width: 210px;
+	height: 60px;
+    margin: 5px;
+}
+
+#helpSearchImg{
+	background-image: url(../img/help_sprite_B.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	border: none;
+	width: 400px;
+	height: 168px;
+    
+}
+
+#helpTranslateImg{
+	background-image: url(../img/help_sprite_B.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px -168px;
+	border: none;
+	width: 400px;
+	height: 174px;
+}
+
+#helpAddressBarImg{
+	background-image: url(../img/help_sprite_A.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px -280px;
+	border: none;
+	width: 200px;
+	height: 20px;
+}
+
+#helpOptionsImg{
+	background-image: url(../img/help_sprite_B.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px -342px;
+	border: none;
+	width: 400px;
+	height: 115px;
 }
 
 #helpBox{
@@ -218,7 +352,44 @@ body {
     border-radius: 10px;
 }
 
-#helpContainer{
+#helpTabNoBorder{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#helpMark {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    border-top-right-radius: 10px;
+    padding-right: 2px;
+    color: white;
+}
+
+#tagsTab{
     padding-left:0px;
     padding-right:0px;
 }
+
+#highlightTab{
+    padding-left:0px;
+    padding-right:0px;
+}
+
+#tagsTab{
+    padding-left:0px;
+    padding-right:0px;
+}
+
+#tagsTab{
+    padding-left:0px;
+    padding-right:0px;
+}
+
+#tagsTab{
+    padding-left:0px;
+    padding-right:0px;
+}
+

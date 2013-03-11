@@ -51,7 +51,7 @@ function WORD_BLACKLIST(language) {
                         "va": true, "lui": true, "nel": true, "suo": true, "sua": true, "suoi": true,
                         "oh": true, "oh!": true, "tuo": true, "tua": true, "tuoi": true, "hanno": true,
                         "noi": true, "sta": true, "due": true, "mi": true, "il": true, "ai": true,
-                        "dei": true, "sti": true
+                        "dei": true, "sti": true, "ad": true
                     };
                                     
         case "fr":  return {

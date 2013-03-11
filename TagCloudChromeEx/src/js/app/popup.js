@@ -26,56 +26,41 @@ _gaq.push(['_trackPageview']);
 myApp.service('tagCloudService', function() {
     "use strict";
 
-    this.createTagCloud = function(tabs, callback){
-    
-        //First, detect page language
-        chrome.tabs.detectLanguage( null,
-                                    function(language) {
-                                        //Once detected, choose the appropriate black list
-                                        var blacklist = WORD_BLACKLIST(language);
-                                        if (typeof blacklist === "undefined"){
-                                            //If language isn't supported, use the default one (English)
-                                            blacklist = WORD_BLACKLIST("en");
-                                        }
-
-                                        chrome.tabs.sendMessage(tabs[0].id, { 'action': 'CreatePageTagCloud', 
-                                                                              MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
-                                                                              MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
-                                                                              MAX_TAGS: MAX_TAGS,
-                                                                              BLACKLIST: blacklist
-                                                                            },
-                                                                callback);
-                                                                        
-                                    });        
-    };
-
-        /** Checks if a tag cloud has been already computed for the page;
-          * if it isn't call the service method to create it
+        /** A new tag cloud is created every time the function is called,
+          * i.e. every time the popup is shown.
           *
           */    
     this.getTagCloud = function(callback) {
         var that = this;
         
-        chrome.tabs.query({'active': true},
-        function (tabs) {
-            
-            if (tabs.length > 0)
-            {                
-                chrome.tabs.sendMessage(tabs[0].id, { 'action': 'CheckPageTagCloud'},
-                                        function (response) {
-                                            
-                                            if (!response.tagCloud){
-                                                that.createTagCloud(tabs, callback);
-                                            }else {
-                                                callback(response);
-                                            }
-                                        });
-                
-                
+        chrome.tabs.query(  {'active': true},
+                function (tabs) {
+                    
+                    if (tabs.length > 0)
+                    {    
+                        //First, detect page language
+                        chrome.tabs.detectLanguage( null,
+                                function(language) {
+                                    //Once detected, choose the appropriate black list
+                                    var blacklist = WORD_BLACKLIST(language);
+                                    if (typeof blacklist === "undefined"){
+                                        //If language isn't supported, use the default one (English)
+                                        blacklist = WORD_BLACKLIST("en");
+                                    }
 
-            }
-
-        });
+                                    chrome.tabs.sendMessage(tabs[0].id, { 'action': 'CreatePageTagCloud', 
+                                                                          MAX_LABEL_SIZE: MAX_LABEL_SIZE, 
+                                                                          MIN_LABEL_SIZE: MIN_LABEL_SIZE, 
+                                                                          MAX_TAGS: MAX_TAGS,
+                                                                          BLACKLIST: blacklist
+                                                                        },
+                                                            callback);
+                                                                    
+                                });
+                    }
+                    
+                    return;
+                });
     };
 });
 
@@ -195,7 +180,7 @@ myApp.service('tagHighlightService',
                                 chrome.tabs.query({'active': true},
                                         function (tabs) {
                                             if (tabs.length > 0) {
-                                                 chrome.tabs.insertCSS(tabs[0].id, {code: "." + TAG_CLOUD_HIGHLIGH_CLASS + "{background: orange;}"});
+                                                 chrome.tabs.insertCSS(tabs[0].id, {code: "." + TAG_CLOUD_HIGHLIGH_CLASS + "{background: " + OptionsHandler.loadOption("highlight_color") + ";}"});
                                                  chrome.tabs.sendMessage(tabs[0].id, { 'action': 'HighlightTag', 
                                                           tag: text, 
                                                           highlightClassName: highlightClassName,
@@ -336,8 +321,17 @@ myApp.controller("PageController", function ($scope, tagCloudService, tagCloudRe
                                                 }
                                             });              
 
-                $('.search_button').tooltip();
-                                                    
+                $('.tooltiped').tooltip();
+                
+                $('#helpTab a').click(function (e) {
+                  e.preventDefault();
+                  $(this).tab('show');
+                })
+                           
+                $('#gotoChromeExtensions').click(function (e) {
+                                                    chrome.tabs.create({url:'chrome://extensions'});
+                                                 });
+                             
                 callback = null;    //Callback callable only once
 
             //$scope.apply();	//Update the page, if any template tag or helper is used

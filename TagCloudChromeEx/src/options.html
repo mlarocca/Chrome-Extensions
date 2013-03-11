@@ -4,6 +4,7 @@
         <title>Tag Cloud Search + Translate Options</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/options.css">
+        <link rel="stylesheet" href="css/colorpicker.css">
     </head>
 
     <body>
@@ -25,7 +26,7 @@
             <div class='row-fluid'>
                 <div class="span2 field">
                     <span class="label label-info">Default Search Engine</span>
-                    <img src = "img/info.png" class="info" data-placement="right" data-title="Default search engine used when Enter is pressed on the search bar"/>
+                    <img src = "img/info.png" class="info" data-placement="right" data-title="Default search engine used when Enter is pressed in the Tag Cloud's search bar"/>
                 </div>
                 <div class="span2">
                     <select id="search_engine" >
@@ -57,6 +58,18 @@
                 </div>
             </div>
             
+            <div class='row-fluid'>
+                <div class="span2 field">
+                    <span class="label label-info">Highlight color</span>
+                    <img src = "img/info.png" class="info" data-placement="right" data-title="Color used to highlight text in the document"/>
+                </div>            
+                <div class="span10">          
+                        <div class="input-append color" data-color="rgb(255, 146, 180)" data-color-format="rgb" id="colorpicker">
+                            <input type="text" class="span2" value="" readonly id="highlight_color">
+                            <span class="add-on"><i style="background-color: rgb(255, 146, 180)"></i></span>
+                        </div>
+                </div>
+            </div>
             
             <div class='row-fluid'>
                 <div class="span1 offset2">
@@ -67,6 +80,8 @@
                 </div>
                 <span id="status" class="label label-success"></span>
             </div>
+            
+          </div>
         </div>
         <!-- Modal -->
         <div id="resetModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -89,6 +104,7 @@
 
     <script src="js/lib/jquery-1.8.3.min.js"></script>
     <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/bootstrap-colorpicker.min.js"></script>
     <script src="js/lib/localStorage.js"></script>
     <script src="js/app/options.js"></script>
 

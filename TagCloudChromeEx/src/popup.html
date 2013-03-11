@@ -18,15 +18,16 @@
     <body id="popup">
         
         <div id="search_bar_div">
-            <div id = "search_button_google" class="search_button" src = "img/google.png" data-placement="right" data-title="Search with Google" ></div>
-            <div id = "search_button_twitter" class="search_button" src = "img/twitter.png" data-placement="right" data-title="Search with Twitter" ></div>
-            <div id = "search_button_facebook" class="search_button" src = "img/facebook.png" data-placement="bottom" data-title="Search with Facebook" ></div>
-            <div id = "search_button_quora" class="search_button" src = "img/quora.png" data-placement="bottom" data-title="Search with Quora" ></div>
-            <div id = "search_button_wikipedia" class="search_button" src = "img/wikipedia.png" data-placement="bottom" data-title="Search with Wikipedia" ></div>
+            <div id = "search_button_google" class="search_button tooltiped" src = "img/google.png" data-placement="right" data-title="Search with Google" ></div>
+            <div id = "search_button_twitter" class="search_button tooltiped" src = "img/twitter.png" data-placement="right" data-title="Search with Twitter" ></div>
+            <div id = "search_button_facebook" class="search_button tooltiped" src = "img/facebook.png" data-placement="bottom" data-title="Search with Facebook" ></div>
+            <div id = "search_button_quora" class="search_button tooltiped" src = "img/quora.png" data-placement="bottom" data-title="Search with Quora" ></div>
+            <div id = "search_button_wikipedia" class="search_button tooltiped" src = "img/wikipedia.png" data-placement="bottom" data-title="Search with Wikipedia" ></div>
             <input type="text" id="search_bar" title="Enter your query"/>
-            <a role="button" href="#clearModal" data-toggle="modal"><div id = "button_clear" class="search_button" data-placement="left" data-title="Clear search bar"></div></a>
-            <a id="helpBox" role="button" href="#helpModal" data-toggle="modal" class="search_button" data-placement="left" data-title="Help!"><i class="icon-question-sign"></i></a>
-        </div>        
+            <a role="button" href="#clearModal" data-toggle="modal"><div id = "button_clear" class="search_button tooltiped" data-placement="left" data-title="Clear search bar"></div></a>
+            <a id="helpBox" role="button" href="#helpModal" data-toggle="modal" class="search_button tooltiped" data-placement="left" data-title="Help!"><i class="icon-question-sign"></i></a>
+        </div>
+        <hr class="separator">
         <div id="cloud_div" ng-controller="PageController">
         </div>
         
@@ -48,45 +49,113 @@
         
         <!-- Modal: HELP -->
         <div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
-            <div class="modal-header">
+            <div class="modal-header" id="helpHeader">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="helpModalLabel"><span id="status" class="label label-info">Instructions</span></h3>
+                <!--h3 id="helpModalLabel"><span id="status" class="label label-info">Instructions</span></h3-->
+                <ul class="nav nav-tabs" id="helpTab">
+                  <li class="active"><a href="#tagsTab">Tags</a></li>
+                  <li><a href="#highlightTab">Highlighting</a></li>
+                  <li><a href="#searchTab">Search</a></li>
+                  <li><a href="#translateTab">Translate</a></li>
+                  <li><a href="#optionsTab">Options</a></li>
+                </ul>                
                 
             </div>
             <div class="modal-body">
-                <div id="helpContainer" class="container-fluid">
-                    <div class="row-fluid">
-                        <div class="span3">
-                            <div class="row-fluid helpTab span12">
-                                <div id="helpTagClickImg"></div>
-                                <div class="helpText">Choose a Tag and move the mouse pointer over it...</div>
+                <div id="helpMark" class="label-important">
+                    Help
+                </div>
+                <div class="tab-content">
+                    <div id="tagsTab" class="container-fluid tab-pane active">
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="row-fluid helpTab span12">
+                                    <div id="helpTagClickImgSmall" class="tooltiped" data-title="Mouse pointer over a Tag" data-placement="bottom"></div>
+                                    <div class="helpText">Choose a Tag and move the mouse pointer over it...</div>
+                                </div>
+                                <div class="row-fluid span12">
+                                    <div id="bigPlus">+</div>
+                                </div>
                             </div>
-                            <div class="row-fluid span12">
-                                <div id="bigPlus">+</div>
-                            </div>
-                        </div>
-                        <div class="span9 helpTab">
-                            <div class ="row-fluid">
-                                <div id="helpShiftClickImg" class="span6"> </div>
-                                <div class="span3"><div class="helpText">Highlight the selected Tag in the page.</div></div>
-                            </div>
-                            <div class ="row-fluid" class="span6">
-                                <div class="helpRowText">--------------------------    or    --------------------------</div>
-                            </div>                            
-                            <div class ="row-fluid">
-                                <div id="helpAltClickImg" class="span6"> </div>
-                                <div class="span3"><div class="helpText">Remove previous highlight for the selected Tag.</div></div>
-                            </div>
-                            <div class ="row-fluid" class="span6">
-                                <div class="helpRowText">--------------------------    or    --------------------------</div>
-                            </div>                            
-                            <div class ="row-fluid" class="span6">
-                                <div id="helpClickImg" class="span6"></div>
-                                <div class="span3"><div class="helpText">Add the selected Tag text to the search bar.</div></div>
+                            <div class="span9 helpTab">
+                                <div class ="row-fluid">
+                                    <div id="helpShiftClickImg" class="span6 tooltiped" data-title="Press Shift key + Click left mouse button" data-placement="bottom"> </div>
+                                    <div class="span3"><div class="helpText">Highlight the selected Tag in the page</div></div>
+                                </div>
+                                <div class ="row-fluid" class="span6">
+                                    <div class="helpRowText">--------------------------    or    --------------------------</div>
+                                </div>                            
+                                <div class ="row-fluid">
+                                    <div id="helpAltClickImg" class="span6 tooltiped" data-title="Press Alt key + Click left mouse button" data-placement="bottom"> </div>
+                                    <div class="span3"><div class="helpText">Remove previous highlight for the selected Tag</div></div>
+                                </div>
+                                <div class ="row-fluid" class="span6">
+                                    <div class="helpRowText">--------------------------    or    --------------------------</div>
+                                </div>                            
+                                <div class ="row-fluid" class="span6">
+                                    <div id="helpLeftClickImg" class="span6 tooltiped" data-title="Click left mouse button" data-placement="top"> </div>
+                                    <div class="span3"><div class="helpText">Add the selected Tag text to the search bar</div></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div id="highlightTab" class="container-fluid tab-pane">
+                        <div id="helpTabNoBorder" class ="row-fluid span12">
+                            <div id="helpTagClickImg" class="span3 tooltiped" data-title="Mouse pointer over a Tag" data-placement="right"> </div>
+                            <div id="helpShiftClickImg" class="span6 tooltiped" data-title="Press Shift key + Click left mouse button" data-placement="bottom"> </div>
+                            <div class="span3"><div class="helpText">Highlight the selected Tag in the page</div></div>
+                        </div>
+                        <div id="hline-div" class="row-fluid span12">
+                            <hr class="hline">
+                        </div>
+                        <div id="helpTabNoBorder" class ="row-fluid span12">
+                            <div id="helpTagUnClickImg" class="span3 tooltiped" data-title="Mouse pointer over an highlighted Tag" data-placement="right"> </div>
+                            <div id="helpAltClickImg" class="span6 tooltiped" data-title="Press Alt key + Click left mouse button" data-placement="bottom"> </div>
+                            <div class="span3"><div class="helpText">Remove previous highlight for the selected Tag</div></div>
+                        </div>
+                        <div id="hline-div" class="row-fluid span12">
+                            <hr class="hline">
+                        </div>
+                        <div id="helpTabNoBorder" class ="row-fluid span12">
+                            <div id="helpRightClickImg" class="span3 tooltiped" data-title="Right click anywhere on the page to open context menu" data-placement="right"> </div>
+                            <div id="helpTagRightClickImg" class="span5 tooltiped" data-title="Then select 'Remove Highlight'" data-placement="top"> </div>
+                            <div class="span4"><div class="helpText">Remove all previous highlight on current page</div></div>
+                        </div>
+                    </div>
+                    <div id="searchTab" class="container-fluid tab-pane">
+                        <div class="row-fluid span12">
+                            <div class="span4 offset2"><div class="helpText">Select the text you want to use in your search</div></div>
+                            <div id="helpPlusImg" class="span1"> </div>
+                            <div id="helpRightClickNoPlusImg" class="span2 tooltiped" data-title="Right click over the selection" data-placement="right"> </div>
+                        </div>
+                        <div class="row-fluid span12">
+                            <div id="helpSearchImg" class="span11 offset1 tooltiped" data-title="Then select the Tag Cloud sub-menu, and chose the search engine to use" data-placement="top"> </div>
+                        </div>
+                    </div>
+                    <div id="translateTab" class="container-fluid tab-pane">
+                        <div class="row-fluid span12">
+                            <div class="span4 offset2"><div class="helpText">Select the text you want to use in your search</div></div>
+                            <div id="helpPlusImg" class="span1"> </div>
+                            <div id="helpRightClickNoPlusImg" class="span2 tooltiped" data-title="Right click over the selection" data-placement="right"> </div>
+                        </div>
+                        <div class="row-fluid span12">
+                            <div id="helpTranslateImg" class="span11 offset1 tooltiped" data-title="Then select the Tag Cloud sub-menu, and chose the search engine to use" data-placement="top"> </div>
+                        </div>
+                    </div>
+                    <div id="optionsTab" class="container-fluid tab-pane">
+                        <div class="row-fluid span12">
+                            <a id="gotoChromeExtensions" href="#">
+                                <div id="helpAddressBarImg" class="span6 offset3 tooltiped" data-title="Enter chrome://extensions in the address bar and press enter (or click here to open it now in a new tab)" data-placement="bottom"> </div>
+                            </a>
+                        </div>
+                        <div class="row-fluid span12">
+                            <div id="helpPlusImg" class="span6 offset5"> </div>
+                        </div>                              
+                        <div class="row-fluid span12">
+                            <div id="helpOptionsImg" class="span11 offset1 tooltiped" data-title="Find 'Tag Cloud' in the list of extensions, and then click on 'Options'" data-placement="top"> </div>
+                        </div>
+                    </div>
+                <div>
             </div>
         </div>            
     </body>

@@ -109,7 +109,7 @@ if (!window.OptionsHandler){
             /** Options supported.
                 Options are stored as couples name -> (defaul value)
              */
-            var OPTIONS = {"search_engine": "search_Google", "target_language": "en"};
+            var OPTIONS = {"search_engine": "search_Google", "target_language": "en", "highlight_color": "rgba(255,165,0,1.0)"};
 
     //<UTILITY (private) FUNCTIONS, not exposed in the interface>
             /** Stores the an option
@@ -159,7 +159,13 @@ if (!window.OptionsHandler){
                     
                 for (optionName in OPTIONS) {
                     select = document.getElementById(optionName);
-                    storeOption(optionName, select.children[select.selectedIndex].value);
+                    switch (optionName) {
+                        case "highlight_color":
+                            storeOption(optionName, select.value);
+                            break;
+                        default:                    
+                            storeOption(optionName, select.children[select.selectedIndex].value);
+                    }
                 }
               
                 // Update status to let user know options were saved.
@@ -181,13 +187,20 @@ if (!window.OptionsHandler){
                 for (optionName in OPTIONS) {
                     favorite = loadOption(optionName);
                     if (favorite) {
-                        select = document.getElementById(optionName);
-                        for (j = 0; j < select.children.length; j++) {
-                            child = select.children[j];
-                            if (child.value === favorite) {
-                                child.selected = "true";
+                        switch (optionName) {
+                            case "highlight_color":
+                                $("#" + optionName).attr("value", favorite);
+                                $('#colorpicker')[0].colorPicker.setValue(favorite);
                                 break;
-                            }
+                            default:
+                                select = document.getElementById(optionName);
+                                for (j = 0; j < select.children.length; j++) {
+                                    child = select.children[j];
+                                    if (child.value === favorite) {
+                                        child.selected = "true";
+                                        break;
+                                    }
+                                }
                         }
                     }
                 }
