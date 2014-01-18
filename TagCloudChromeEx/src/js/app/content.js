@@ -320,7 +320,7 @@
                 maxCounter = 0;
                 
             var i, n, w,
-                word_re = /^[a-z]{1}[a-z\-]*[a-z]+$/i,   //Words, at least 2 characters long, possibly separated by hiphen
+                punctuation = /[!"&()*+,-\.\/:;<=>?\[\\\]^`\{|\}~]+/g,
                 tmp = $("body").getText();
                         
                 
@@ -328,9 +328,10 @@
                 tmp = tmp.split(/\s+/);
                 n = tmp.length;
                 for (i=0; i < n; i++){
-                    w = tmp[i].toLowerCase();
-                    if (word_re.test(w) && !blackList[w]){
-                        w = w.charAt(0).toUpperCase() + w.slice(1);
+                    w = tmp[i].toLocaleLowerCase();
+                    w =  w.replace(punctuation, ' ');
+                    if (w.length >= 2 && !blackList[w]){
+                        w = w.charAt(0).toLocaleUpperCase() + w.slice(1);
                         if (tagCloudDict[w]){
                             tagCloudDict[w] += 1;
                         }else{
